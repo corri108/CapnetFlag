@@ -1,9 +1,9 @@
 package com.capnet.game;
 
-import com.capnet.share.IPacketCallback;
-import com.capnet.share.PacketManager;
-import com.capnet.share.Packets.Player_1;
-import com.capnet.share.TransportPair;
+import com.capnet.share.networking.IPacketCallback;
+import com.capnet.share.networking.PacketManager;
+import com.capnet.share.networking.packets.Player_1;
+import com.capnet.share.networking.TransportPair;
 
 /**
  * Created by michaelpollind on 4/21/16.

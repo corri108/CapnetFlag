@@ -1,10 +1,8 @@
-package com.capnet.share;
+package com.capnet.share.networking;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class PacketSender implements Runnable{
 
@@ -49,7 +47,8 @@ public class PacketSender implements Runnable{
 				}
 				catch (SocketException e)
 				{
-					this._packetManager.UnbindSocket(tranportPair.Out);
+					//disconnect the client
+					this._packetManager._socketDisconnect.onSocket(tranportPair.Out);
 				}
 				catch (IOException e) {
 					// TODO Auto-generated catch block

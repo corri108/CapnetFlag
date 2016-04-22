@@ -1,4 +1,4 @@
-package com.capnet.share.Packets;
+package com.capnet.share.networking.packets;
 
 import java.nio.ByteBuffer;
 

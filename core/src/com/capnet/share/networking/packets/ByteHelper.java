@@ -1,9 +1,8 @@
-package com.capnet.share.Packets;
+package com.capnet.share.networking.packets;
 
 import com.badlogic.gdx.math.Vector2;
 
 import java.nio.ByteBuffer;
-import java.util.Vector;
 
 /**
  * Created by michaelpollind on 4/21/16.

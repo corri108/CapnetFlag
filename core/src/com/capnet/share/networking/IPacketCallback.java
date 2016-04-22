@@ -1,4 +1,4 @@
-package com.capnet.share;
+package com.capnet.share.networking;
 
 /**
  * Created by michaelpollind on 4/9/16.

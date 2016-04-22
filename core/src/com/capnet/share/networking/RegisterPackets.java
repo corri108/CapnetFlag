@@ -1,5 +1,5 @@
-package com.capnet.share;
-import com.capnet.share.Packets.*;
+package com.capnet.share.networking;
+import com.capnet.share.networking.packets.*;
 
 public class RegisterPackets {
 	public static void setPackets(PacketManager manager)

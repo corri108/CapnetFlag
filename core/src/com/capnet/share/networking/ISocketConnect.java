@@ -1,4 +1,4 @@
-package com.capnet.share;
+package com.capnet.share.networking;
 
 import java.net.Socket;
 

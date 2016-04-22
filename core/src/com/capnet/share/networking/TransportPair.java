@@ -1,6 +1,6 @@
-package com.capnet.share;
+package com.capnet.share.networking;
 
-import com.capnet.share.Packets.IPacket;
+import com.capnet.share.networking.packets.IPacket;
 
 import java.net.Socket;
 public class TransportPair {

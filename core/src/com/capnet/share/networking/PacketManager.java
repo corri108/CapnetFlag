@@ -1,21 +1,13 @@
-package com.capnet.share;
+package com.capnet.share.networking;
 
-import com.capnet.share.Packets.IPacket;
+import com.capnet.share.networking.packets.IPacket;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ConcurrentMap;
 
 public class PacketManager {
 
@@ -24,18 +16,12 @@ public class PacketManager {
 
 	//selection of packets to match against
 	protected  ConcurrentHashMap<Integer, IPacket<?>> _packets = new ConcurrentHashMap<Integer,IPacket<?>>();
-    protected ISocketConnect _socketConnected = new ISocketConnect() {
-		@Override
-		public void onSocket(Socket socket) {
+    protected ISocketConnect _socketConnected = socket -> {
 
-		}
-	};
-	protected ISocketConnect _socketDisconnect = new ISocketConnect() {
-		@Override
-		public void onSocket(Socket socket) {
+    };
+	protected ISocketConnect _socketDisconnect = socket -> {
 
-		}
-	};
+    };
 
 	private ConcurrentHashMap<Socket,Thread> _packetListner = new ConcurrentHashMap<Socket,Thread>();
 
@@ -94,7 +80,6 @@ public class PacketManager {
 		if(_packetListner.contains(s)) {
 			Thread thread = _packetListner.get(s);
 			thread.interrupt();
-			_socketDisconnect.onSocket(s);
 			_packetListner.remove(s);
 			return true;
 		}
@@ -186,5 +171,6 @@ public class PacketManager {
 	public void  ClearPacketHandles(){
 		_packetCallback.clear();
 	}
+
 
 }

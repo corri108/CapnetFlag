@@ -1,13 +1,12 @@
-package com.capnet.share;
+package com.capnet.share.networking;
 
 import java.io.InputStream;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.util.ArrayDeque;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import com.capnet.share.Packets.IPacket;
+import com.capnet.share.networking.packets.IPacket;
 
 public class PacketListener implements Runnable{
 	private Socket _socket = null;
