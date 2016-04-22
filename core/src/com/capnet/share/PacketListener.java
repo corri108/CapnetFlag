@@ -51,7 +51,8 @@ public class PacketListener implements Runnable{
 						IPacket<?> p = _packetManager.GetPacketInstance(id);
 						if(p != null)
 						{
-							p.Decode(data);
+
+							p.Decode(ByteBuffer.wrap(data));
 
 							if(!_packetManager._packetCallback.containsKey(p.Id())) {
 								_reprocess.add(p);
@@ -86,6 +87,7 @@ public class PacketListener implements Runnable{
 		}
 		catch (Exception e)
 		{
+
 			System.out.println("Error: " + e.toString());
 		}
 		System.out.println("Packet Listener has stopped");

@@ -21,9 +21,21 @@ public class PacketManager {
 
 	protected  ConcurrentLinkedQueue<TransportPair> _packetsOut = new ConcurrentLinkedQueue<TransportPair>();
 	protected ConcurrentHashMap<Integer,IPacketCallback> _packetCallback = new ConcurrentHashMap<Integer,IPacketCallback>();
+
 	//selection of packets to match against
 	protected  ConcurrentHashMap<Integer, IPacket<?>> _packets = new ConcurrentHashMap<Integer,IPacket<?>>();
-    protected ISocketConnect _socketConnected;
+    protected ISocketConnect _socketConnected = new ISocketConnect() {
+		@Override
+		public void onSocket(Socket socket) {
+
+		}
+	};
+	protected ISocketConnect _socketDisconnect = new ISocketConnect() {
+		@Override
+		public void onSocket(Socket socket) {
+
+		}
+	};
 
 	private ConcurrentHashMap<Socket,Thread> _packetListner = new ConcurrentHashMap<Socket,Thread>();
 
@@ -73,17 +85,25 @@ public class PacketManager {
 
 		return true;
 	}
-	
+
+	/*
+	* Unbinde the socket from the packet manager
+	* */
 	public boolean UnbindSocket(Socket s)
 	{
-		
-		Thread thread = _packetListner.get(s);
-		thread.interrupt();
-		_packetListner.remove(s);
-
-		return true;
+		if(_packetListner.contains(s)) {
+			Thread thread = _packetListner.get(s);
+			thread.interrupt();
+			_socketDisconnect.onSocket(s);
+			_packetListner.remove(s);
+			return true;
+		}
+		return false;
 	}
-	
+
+	/*
+	*returns an instance of the associated packet id
+	 */
 	public IPacket<?> GetPacketInstance(int id)
 	{
 		IPacket<?> result = _packets.get(new Integer(id)).Instance();
@@ -142,10 +162,16 @@ public class PacketManager {
 		_packets.put(packet.Id(),packet);
 	}
 
-
+	//called when either a client has connected on either the server or client
 	public void OnConnected(ISocketConnect connection)
 	{
         _socketConnected = connection;
+	}
+
+
+	public void OnDisconnect(ISocketConnect connection)
+	{
+		_socketDisconnect = connection;
 	}
 
 	public void OnPacket(int id, IPacketCallback callback)

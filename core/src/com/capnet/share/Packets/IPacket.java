@@ -1,10 +1,12 @@
 package com.capnet.share.Packets;
 
+import java.nio.ByteBuffer;
+
 public interface IPacket<E> {
 	
-	public IPacket<?> Instance();
-	public byte[] Encode();
-	public void Decode(byte[] data);
-	public int Id();
+	IPacket<?> Instance();
+	ByteBuffer Encode();
+	void Decode(ByteBuffer data);
+	int Id();
 
 }

@@ -2,6 +2,7 @@ package com.capnet.share;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -22,8 +23,13 @@ public class PacketSender implements Runnable{
 			{
 				TransportPair tranportPair =  _packetManager._packetsOut.remove();
 				try {
-				
-					byte[] data = tranportPair.Packet.Encode();
+
+
+					ByteBuffer payloadBuffer= tranportPair.Packet.Encode();
+					payloadBuffer.rewind();
+					byte[] data = new byte[payloadBuffer.remaining()];
+					payloadBuffer.get(data);
+
 					//add the length of the the collection plus the two ints
 					ByteBuffer buffer =  ByteBuffer.allocate(data.length + 4*3 +1);
 					buffer.put((byte)125);
@@ -40,7 +46,12 @@ public class PacketSender implements Runnable{
 					
 			
 					
-				} catch (IOException e) {
+				}
+				catch (SocketException e)
+				{
+					this._packetManager.UnbindSocket(tranportPair.Out);
+				}
+				catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

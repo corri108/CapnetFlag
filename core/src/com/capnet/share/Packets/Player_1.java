@@ -1,5 +1,7 @@
 package com.capnet.share.Packets;
 
+import java.nio.ByteBuffer;
+
 /**
  * Created by michaelpollind on 4/21/16.
  */
@@ -17,12 +19,12 @@ public class Player_1 implements IPacket<Player_1> {
     }
 
     @Override
-    public byte[] Encode() {
-        return new byte[0];
+    public ByteBuffer Encode() {
+        return ByteBuffer.allocate(0);
     }
 
     @Override
-    public void Decode(byte[] data) {
+    public void Decode(ByteBuffer data) {
 
     }
 
