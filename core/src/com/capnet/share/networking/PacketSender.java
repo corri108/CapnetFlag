@@ -1,6 +1,7 @@
 package com.capnet.share.networking;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 
@@ -21,7 +22,8 @@ public class PacketSender implements Runnable{
 			{
 				TransportPair tranportPair =  _packetManager._packetsOut.remove();
 				try {
-
+					if(tranportPair.Out.isClosed())
+						break;
 
 					ByteBuffer payloadBuffer= tranportPair.Packet.Encode();
 					payloadBuffer.rewind();
@@ -50,11 +52,16 @@ public class PacketSender implements Runnable{
 				catch (SocketException e)
 				{
 					//disconnect the client
-					this._packetManager._socketDisconnect.onSocket(tranportPair.Out);
+					_disconnect(tranportPair.Out);
+					e.printStackTrace();
+
 				}
 				catch (IOException e) {
-					// TODO Auto-generated catch block
+					//disconnect the client
+
 					e.printStackTrace();
+					_disconnect(tranportPair.Out);
+
 				}
 			}
 			else
@@ -72,6 +79,19 @@ public class PacketSender implements Runnable{
 			
 		}
 		
+	}
+
+	private  void _disconnect(Socket s)
+	{
+		this._packetManager._socketDisconnect.onSocket(s);
+		this._packetManager.UnbindSocket(s);
+		try {
+			s.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		System.out.println("closing socket" + s);
+
 	}
 
 }

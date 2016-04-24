@@ -1,13 +1,15 @@
 package com.capnet.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.capnet.share.networking.PacketManager;
 
 /**
  * Created by michaelpollind on 4/19/16.
  */
 public class GameScreen implements Screen {
-    public  GameScreen(Main main)
+    public  GameScreen(Main main,PacketManager manager)
     {
 
     }
@@ -19,7 +21,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     @Override

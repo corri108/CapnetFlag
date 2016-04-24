@@ -11,12 +11,12 @@ import com.capnet.share.networking.packets.Player_Simple_2;
 public class PlayerManager {
 
     public PlayerManager(PacketManager pkt) {
-        pkt.OnPacket(1, new IPacketCallback() {
+        pkt.OnPacket(new IPacketCallback<Player_Simple_2>() {
             @Override
             public void onPacket(TransportPair pair) {
                 Player_Simple_2 player = (Player_Simple_2) pair.Packet;
             }
-        });
+        },Player_Simple_2.class);
 
     }
 

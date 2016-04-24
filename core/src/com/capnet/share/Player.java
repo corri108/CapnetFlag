@@ -11,7 +11,8 @@ import java.nio.ByteBuffer;
 public class Player implements IPacket{
     public Vector2 Location= new Vector2();
     public Vector2 Velocity = new Vector2();
-
+    public  int id = 0;
+    public  String name = "temp";
 
     @Override
     public ByteBuffer Encode() {

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -16,7 +16,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import javafx.scene.Scene;
+import com.capnet.server.HostService;
+import com.capnet.share.networking.ISocketConnect;
+import com.capnet.share.networking.PacketManager;
+
+
+import java.io.IOException;
+import java.net.Socket;
 
 /**
  * Created by michaelpollind on 4/19/16.
@@ -31,12 +37,14 @@ public class MainMenuScreen implements Screen {
     private Main main;
 
     //main window
-    TextButton _login;
-    TextField _nameField;
-    TextField _ipField;
-    TextField _portField;
-    BitmapFont _font;
-    TextButtonStyle _buttonStyle;
+    private TextButton _login;
+    private TextField _nameField;
+    private TextField _ipField;
+    private TextField _portField;
+    private BitmapFont _font;
+    private TextButtonStyle _buttonStyle;
+    private Button _isHostToggle;
+
 
     public  MainMenuScreen(Main main)
     {
@@ -63,7 +71,25 @@ public class MainMenuScreen implements Screen {
         _login.setHeight(15);
         _login.addListener(new ClickListener(){
             public void clicked(InputEvent e, float x, float y) {
-                main.setScreen(new GameScreen(main));
+
+                int port = Integer.parseInt(_portField.getText());
+                String ipAddress = _ipField.getText();
+                //TODO: get toggle to work
+                try {
+                    new HostService(port);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
+                PacketManager packetManager = new PacketManager();
+                packetManager.OnConnected(socket -> {
+                    main.setScreen(new GameScreen(main,packetManager));
+                });
+                packetManager.RegisterSocket(ipAddress,port);
+
+
+
+
                 Gdx.app.log("Click", "performed"); // -> never happend
             }
         });
@@ -71,21 +97,28 @@ public class MainMenuScreen implements Screen {
 
         //fields of text
         _nameField = new TextField("user", uiSkin);
-        _nameField.setPosition(270,300);
         _nameField.setWidth(400);
         _nameField.setHeight(15);
 
 
         _ipField = new TextField("localhost", uiSkin);
-        _ipField.setPosition(270,250);
         _ipField.setWidth(400);
         _ipField.setHeight(15);
 
         _portField = new TextField("25565", uiSkin);
-        _portField.setPosition(270,200);
         _portField.setWidth(400);
         _portField.setHeight(15);
         //end text fields
+
+        //toggle works just need to change button when in toggle state
+        _isHostToggle = new Button();
+        _isHostToggle.toggle();
+        _isHostToggle.setWidth(400);
+        _isHostToggle.setHeight(15);
+
+
+        _isHostToggle.setStyle(_buttonStyle);
+
 
 
         TextField titleField;
@@ -101,6 +134,7 @@ public class MainMenuScreen implements Screen {
         _stage.addActor(_nameField);
         _stage.addActor(_ipField);
         _stage.addActor(_portField);
+        _stage.addActor(_isHostToggle);
         _stage.addActor(titleField);
 
         Gdx.input.setInputProcessor(_stage);
@@ -127,7 +161,10 @@ public class MainMenuScreen implements Screen {
 
         _nameField.setPosition(width/2.0f,(height/2.0f)+10 -16*2, Align.center);
          _ipField.setPosition(width/2.0f,(height/2.0f)+10 -16*3, Align.center);
+
         _portField.setPosition(width/2.0f,(height/2.0f)+10 -16*4, Align.center);
+
+        _isHostToggle.setPosition(width/2.0f,(height/2.0f)+10 -16*10, Align.center);
     }
 
     @Override

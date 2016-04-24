@@ -1,11 +1,11 @@
 package com.capnet.share.networking;
 
-import com.badlogic.gdx.utils.Sort;
 import com.capnet.share.networking.packets.IPacket;
 
 import org.reflections.Reflections;
 
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class PacketManager {
 
 	protected  ConcurrentLinkedQueue<TransportPair> _packetsOut = new ConcurrentLinkedQueue<TransportPair>();
-	protected ConcurrentHashMap<Integer,IPacketCallback> _packetCallback = new ConcurrentHashMap<Integer,IPacketCallback>();
+	protected ConcurrentHashMap<Class<? extends  IPacket>, IPacketCallback> _packetCallback = new ConcurrentHashMap<>();
 
 	//selection of packets to match against
 	protected HashMap<Integer, Class<? extends  IPacket>> _packets = new HashMap<>();
@@ -92,13 +92,13 @@ public class PacketManager {
 	* */
 	public boolean UnbindSocket(Socket s)
 	{
-		if(_packetListner.contains(s)) {
-			Thread thread = _packetListner.get(s);
-			thread.interrupt();
-			_packetListner.remove(s);
-			return true;
-		}
-		return false;
+
+		Thread thread = _packetListner.get(s);
+		if(thread == null)
+			return false;
+		thread.interrupt();
+		_packetListner.remove(s);
+		return true;
 	}
 
 	/*
@@ -169,10 +169,9 @@ public class PacketManager {
 		_socketDisconnect = connection;
 	}
 
-	public<T extends IPacket> void OnPacket(int id, IPacketCallback callback)
+	public<T extends IPacket> void OnPacket(IPacketCallback<T> callback, Class<T> type)
 	{
-
-        _packetCallback.put(id,callback);
+        _packetCallback.put(type,callback);
 	}
 
 	public void UnbindPacket(int id){
