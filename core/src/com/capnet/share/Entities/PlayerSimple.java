@@ -1,7 +1,7 @@
-package com.capnet.share.networking.packets;
+package com.capnet.share.Entities;
 
 import com.badlogic.gdx.math.Vector2;
-import com.capnet.share.Player;
+import com.capnet.share.networking.packets.IPacket;
 
 import java.nio.ByteBuffer;
 
@@ -9,19 +9,22 @@ import java.nio.ByteBuffer;
  * Created by michaelpollind on 4/21/16.
  */
 
-public class Player_Simple_2 implements IPacket {
+public class PlayerSimple implements IPacket {
     private  int Id;
     public Vector2 _position;
     public Vector2 _velocity;
 
 
-    public Player_Simple_2()
+    public PlayerSimple()
     {
 
     }
 
-    public Player_Simple_2(Player player)
+    public PlayerSimple(Player player)
     {
+        Id = player.id;
+        _position = player.Location;
+        _velocity = player.Location;
 
     }
 

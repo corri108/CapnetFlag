@@ -31,7 +31,7 @@ public class PacketSender implements Runnable{
 					payloadBuffer.get(data);
 
 					//add the length of the the collection plus the two ints
-					ByteBuffer buffer =  ByteBuffer.allocate(data.length + 4*3 +1);
+					ByteBuffer buffer =  ByteBuffer.allocate(data.length + 4*2 +1);
 					buffer.put((byte)125);
 
 					int packetId = _packetManager._packet_id.get(tranportPair.Packet.getClass());

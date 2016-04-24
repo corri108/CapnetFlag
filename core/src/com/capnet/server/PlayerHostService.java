@@ -1,6 +1,6 @@
 package com.capnet.server;
 
-import com.capnet.share.Player;
+import com.capnet.share.Entities.Player;
 import com.capnet.share.networking.PacketManager;
 
 import java.net.Socket;

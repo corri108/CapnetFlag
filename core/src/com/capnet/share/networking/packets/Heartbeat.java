@@ -3,7 +3,7 @@ package com.capnet.share.networking.packets;
 import java.nio.ByteBuffer;
 
 
-public class Heartbeat_0 implements IPacket {
+public class Heartbeat implements IPacket {
 
 
 	@Override

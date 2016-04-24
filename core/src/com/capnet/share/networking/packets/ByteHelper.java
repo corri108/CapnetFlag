@@ -13,14 +13,15 @@ public  class ByteHelper {
     public static final int CHAR = 2;
     public static final int BOOL = 1;
     public static final int FLOAT = 4;
+    public static final int VECTOR2 = FLOAT*2;
 
-    public void EncodeVector2(ByteBuffer buffer,Vector2 input)
+    public static void EncodeVector2(ByteBuffer buffer,Vector2 input)
     {
         buffer.putFloat(input.x);
         buffer.putFloat(input.y);
     }
 
-    public Vector2 DecodeVector2(ByteBuffer buffer)
+    public static Vector2 DecodeVector2(ByteBuffer buffer)
     {
         float x = buffer.getFloat();
         float y = buffer.getFloat();
@@ -36,12 +37,17 @@ public  class ByteHelper {
         }
     }
 
+    public  static int SizeOfString(String value)
+    {
+        return  value.length() *CHAR + INT;
+    }
+
     public  static String DecodeString(ByteBuffer buffer)
     {
         StringBuffer stringBuffer = new StringBuffer();
         int size = buffer.getInt();
         for (int x = 0; x < size; x++) {
-            stringBuffer.append(buffer.getChar(x));
+            stringBuffer.append(buffer.getChar());
         }
         return  stringBuffer.toString();
 

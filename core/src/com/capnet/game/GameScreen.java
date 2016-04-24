@@ -5,13 +5,16 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.capnet.share.networking.PacketManager;
 
+import java.net.Socket;
+
 /**
  * Created by michaelpollind on 4/19/16.
  */
 public class GameScreen implements Screen {
-    public  GameScreen(Main main,PacketManager manager)
+    private PlayerManager _playerManager ;
+    public  GameScreen(Main main, PacketManager manager, Socket serverSocket)
     {
-
+        _playerManager = new PlayerManager(manager,serverSocket);
     }
 
     @Override

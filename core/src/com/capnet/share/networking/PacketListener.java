@@ -52,13 +52,12 @@ public class PacketListener implements Runnable{
 						{
 
 							p.Decode(ByteBuffer.wrap(data));
-							int packetId = _packetManager._packet_id.get(p.getClass());
-							if(!_packetManager._packetCallback.containsKey(packetId)) {
+							if(!_packetManager._packetCallback.containsKey(p.getClass())) {
 								_reprocess.add(p);
 							}
 							else {
 								if (!Thread.currentThread().isInterrupted()) {
-									_packetManager._packetCallback.get(packetId).onPacket(new TransportPair(p, _socket));//.add(new TransportPair(p,_socket));
+									_packetManager._packetCallback.get(p.getClass()).onPacket(new TransportPair(p, _socket));//.add(new TransportPair(p,_socket));
 								}
 							}
 
