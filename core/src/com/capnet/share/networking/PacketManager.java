@@ -19,14 +19,10 @@ public class PacketManager {
 
 	//selection of packets to match against
 	protected HashMap<Integer, Class<? extends  IPacket>> _packets = new HashMap<>();
-	protected  HashMap<Class<? extends  IPacket>,Integer> _packet_id = new HashMap<>();
+	protected HashMap<Class<? extends  IPacket>,Integer> _packet_id = new HashMap<>();
 
-    protected ISocketConnect _socketConnected = socket -> {
-
-    };
-	protected ISocketConnect _socketDisconnect = socket -> {
-
-    };
+    protected ISocketConnect _socketConnected = socket -> {};
+	protected ISocketConnect _socketDisconnect = socket -> {};
 
 	private ConcurrentHashMap<Socket,Thread> _packetListner = new ConcurrentHashMap<Socket,Thread>();
 
@@ -36,6 +32,7 @@ public class PacketManager {
 		Reflections reflections = new Reflections("com.capnet");
 		Set<Class<? extends IPacket>> packets = reflections.getSubTypesOf(IPacket.class);
 
+		//reorder the packets given that sets may not be in the same order
 		ArrayList<Class<? extends IPacket>> sorted_packets = new ArrayList<>(packets);
 		sorted_packets.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
 

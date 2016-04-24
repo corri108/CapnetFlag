@@ -2,24 +2,21 @@ package com.capnet.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import javafx.scene.Scene;
 
 /**
  * Created by michaelpollind on 4/19/16.
@@ -34,65 +31,60 @@ public class MainMenuScreen implements Screen {
     private Main main;
 
     //main window
-    TextButton button;
-    TextField namefield;
-    TextField ipfield;
-    TextField portfield;
-    BitmapFont font;
-    TextButtonStyle textButtonStyle;
-    Dialog dialog;
+    TextButton _login;
+    TextField _nameField;
+    TextField _ipField;
+    TextField _portField;
+    BitmapFont _font;
+    TextButtonStyle _buttonStyle;
 
     public  MainMenuScreen(Main main)
     {
         this.main = main;
 
-        _stage = new Stage();
+        _stage = new Stage(new ScreenViewport());
         Skin uiSkin = new Skin(Gdx.files.internal("uiskin.json"));
-        font = new BitmapFont();
-        //make menu takeup the whole screen
-        dialog = new Dialog("Capnet Flag : Menu", uiSkin);
-        dialog.setPosition(0,600);
-        dialog.setWidth(640);
-        dialog.setHeight(480);
+        _font = new BitmapFont();
+
         //end menu window
 
         //textButtonStyle
-        textButtonStyle = new TextButtonStyle();
-        textButtonStyle.font = font;
-        textButtonStyle.up = uiSkin.getDrawable("default-round");
-        textButtonStyle.down = uiSkin.getDrawable("default-round-down");
-        textButtonStyle.checked = uiSkin.getDrawable("default-round");
+        _buttonStyle = new TextButtonStyle();
+        _buttonStyle.font = _font;
+        _buttonStyle.up = uiSkin.getDrawable("default-round");
+        _buttonStyle.down = uiSkin.getDrawable("default-round-down");
+        _buttonStyle.checked = uiSkin.getDrawable("default-round");
         //end style
 
         //button connect
-        button = new TextButton("Connect", textButtonStyle);
-        button.setPosition(270,125);
-        button.setWidth(100);
-        button.setHeight(40);
+        _login = new TextButton("Connect", _buttonStyle);
+        _login.setPosition(270,125);
+        _login.setWidth(100);
+        _login.setHeight(15);
+        _login.addListener(new ClickListener(){
+            public void clicked(InputEvent e, float x, float y) {
+                main.setScreen(new GameScreen(main));
+                Gdx.app.log("Click", "performed"); // -> never happend
+            }
+        });
         //end button
 
         //fields of text
-        namefield = new TextField("Enter Name:     ", uiSkin);
-        namefield.setPosition(270,300);
-        namefield.setWidth(100);
-        namefield.setHeight(40);
+        _nameField = new TextField("user", uiSkin);
+        _nameField.setPosition(270,300);
+        _nameField.setWidth(400);
+        _nameField.setHeight(15);
 
-        namefield.addListener(new ClickListener(){
-            public void clicked(InputEvent e, float x, float y) {
 
-                MyTextInputListener listener = new MyTextInputListener();
-                Gdx.input.getTextInput(listener,  "Enter Name:", "Name Here", "");
-            }
-        });
+        _ipField = new TextField("localhost", uiSkin);
+        _ipField.setPosition(270,250);
+        _ipField.setWidth(400);
+        _ipField.setHeight(15);
 
-        ipfield = new TextField("Enter IP:        ", uiSkin);
-        ipfield.setPosition(270,250);
-        ipfield.setWidth(100);
-        ipfield.setHeight(40);
-        portfield = new TextField("Enter Port:      ", uiSkin);
-        portfield.setPosition(270,200);
-        portfield.setWidth(100);
-        portfield.setHeight(40);
+        _portField = new TextField("25565", uiSkin);
+        _portField.setPosition(270,200);
+        _portField.setWidth(400);
+        _portField.setHeight(15);
         //end text fields
 
 
@@ -105,12 +97,13 @@ public class MainMenuScreen implements Screen {
         //end title
 
         //add all of our objects to the render list
-        _stage.addActor(dialog);
-        _stage.addActor(button);
-        _stage.addActor(namefield);
-        _stage.addActor(ipfield);
-        _stage.addActor(portfield);
+        _stage.addActor(_login);
+        _stage.addActor(_nameField);
+        _stage.addActor(_ipField);
+        _stage.addActor(_portField);
         _stage.addActor(titleField);
+
+        Gdx.input.setInputProcessor(_stage);
     }
 
     @Override
@@ -121,14 +114,20 @@ public class MainMenuScreen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        _stage.act(Gdx.graphics.getDeltaTime());
+        _stage.act(delta);
         _stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-
         _stage.getViewport().update(width, height,true);
+
+
+        _login.setPosition(width/2.0f,(height/2.0f)+10 -15*6, Align.center);
+
+        _nameField.setPosition(width/2.0f,(height/2.0f)+10 -16*2, Align.center);
+         _ipField.setPosition(width/2.0f,(height/2.0f)+10 -16*3, Align.center);
+        _portField.setPosition(width/2.0f,(height/2.0f)+10 -16*4, Align.center);
     }
 
     @Override
