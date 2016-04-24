@@ -2,14 +2,12 @@ package com.capnet.share;
 
 import com.badlogic.gdx.math.Vector2;
 import com.capnet.share.networking.packets.IPacket;
-import com.capnet.share.networking.packets.PacketHeading;
 
 import java.nio.ByteBuffer;
 
 /**
  * Created by michaelpollind on 4/21/16.
  */
-@PacketHeading()
 public class Player implements IPacket{
     public Vector2 Location= new Vector2();
     public Vector2 Velocity = new Vector2();

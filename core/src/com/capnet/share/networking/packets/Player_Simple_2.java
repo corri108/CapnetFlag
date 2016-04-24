@@ -8,7 +8,7 @@ import java.nio.ByteBuffer;
 /**
  * Created by michaelpollind on 4/21/16.
  */
-@PacketHeading()
+
 public class Player_Simple_2 implements IPacket {
     private  int Id;
     public Vector2 _position;

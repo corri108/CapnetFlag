@@ -1,7 +1,5 @@
 package com.capnet.share.networking;
 
-import com.capnet.share.networking.packets.PacketHeading;
-
 import java.io.IOException;
 import java.net.SocketException;
 import java.nio.ByteBuffer;

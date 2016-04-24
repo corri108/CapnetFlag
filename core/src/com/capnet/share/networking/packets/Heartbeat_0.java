@@ -2,7 +2,7 @@ package com.capnet.share.networking.packets;
 
 import java.nio.ByteBuffer;
 
-@PacketHeading()
+
 public class Heartbeat_0 implements IPacket {
 
 

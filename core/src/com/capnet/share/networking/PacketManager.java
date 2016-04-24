@@ -1,15 +1,14 @@
 package com.capnet.share.networking;
 
+import com.badlogic.gdx.utils.Sort;
 import com.capnet.share.networking.packets.IPacket;
-import com.capnet.share.networking.packets.PacketHeading;
 
 import org.reflections.Reflections;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -35,17 +34,17 @@ public class PacketManager {
 	public PacketManager()
 	{
 		Reflections reflections = new Reflections("com.capnet");
-		Set<Class<?>> packets = reflections.getTypesAnnotatedWith(PacketHeading.class);
+		Set<Class<? extends IPacket>> packets = reflections.getSubTypesOf(IPacket.class);
+
+		ArrayList<Class<? extends IPacket>> sorted_packets = new ArrayList<>(packets);
+		sorted_packets.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
 
 		int id = 0;
-		for(Class<?> packet : packets)
+		for(Class<? extends IPacket> packet : sorted_packets)
 		{
-			if(IPacket.class.isAssignableFrom(packet))
-			{
-				_packets.put(id, (Class<? extends IPacket>) packet);
-				_packet_id.put((Class<? extends IPacket>) packet,id);
-				id++;
-			}
+			_packets.put(id, packet);
+			_packet_id.put(packet,id);
+			id++;
 		}
 
 

@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import com.capnet.share.networking.packets.IPacket;
-import com.capnet.share.networking.packets.PacketHeading;
 
 public class PacketListener implements Runnable{
 	private Socket _socket = null;
