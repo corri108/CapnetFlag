@@ -7,11 +7,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.capnet.share.networking.PacketManager;
 
 public class Main extends Game {
 	@Override
 	public void create () {
-
+		new PacketManager();
 		this.setScreen(new MainMenuScreen(this));
 	}
 

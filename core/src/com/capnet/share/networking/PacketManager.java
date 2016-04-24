@@ -1,10 +1,14 @@
 package com.capnet.share.networking;
 
 import com.capnet.share.networking.packets.IPacket;
+import com.capnet.share.networking.packets.PacketHeading;
+
+import org.reflections.Reflections;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -15,7 +19,9 @@ public class PacketManager {
 	protected ConcurrentHashMap<Integer,IPacketCallback> _packetCallback = new ConcurrentHashMap<Integer,IPacketCallback>();
 
 	//selection of packets to match against
-	protected  ConcurrentHashMap<Integer, IPacket<?>> _packets = new ConcurrentHashMap<Integer,IPacket<?>>();
+	protected HashMap<Integer, Class<? extends  IPacket>> _packets = new HashMap<>();
+	protected  HashMap<Class<? extends  IPacket>,Integer> _packet_id = new HashMap<>();
+
     protected ISocketConnect _socketConnected = socket -> {
 
     };
@@ -28,7 +34,20 @@ public class PacketManager {
 
 	public PacketManager()
 	{
-        RegisterPackets.setPackets(this);
+		Reflections reflections = new Reflections("com.capnet");
+		Set<Class<?>> packets = reflections.getTypesAnnotatedWith(PacketHeading.class);
+
+		int id = 0;
+		for(Class<?> packet : packets)
+		{
+			if(IPacket.class.isAssignableFrom(packet))
+			{
+				_packets.put(id, (Class<? extends IPacket>) packet);
+				_packet_id.put((Class<? extends IPacket>) packet,id);
+				id++;
+			}
+		}
+
 
     }
 
@@ -89,24 +108,23 @@ public class PacketManager {
 	/*
 	*returns an instance of the associated packet id
 	 */
-	public IPacket<?> GetPacketInstance(int id)
-	{
-		IPacket<?> result = _packets.get(new Integer(id)).Instance();
+	public IPacket GetPacketInstance(int id) throws IllegalAccessException, InstantiationException {
+		Class<? extends  IPacket> result = _packets.get(new Integer(id));
 		if(result == null)
 		{
 			System.out.println("unknown packet ID:" + id);
 		}
-		return result;
+		return result.newInstance();
 	}
 	
 	//sends packet
-	public void SendPacket(IPacket<?> packet, Socket s)
+	public void SendPacket(IPacket packet, Socket s)
 	{
 		_packetsOut.add(new TransportPair(packet,s));
 	
 	}
 	
-	public void SendPacket(IPacket<?> packet, Socket[] socket)
+	public void SendPacket(IPacket packet, Socket[] socket)
 	{
 		for(int x =0; x < socket.length; x++)
 		{
@@ -115,14 +133,14 @@ public class PacketManager {
 		
 	}
 	
-	public void SendPacket(IPacket<?> packet, Set<Socket> keySet) {
+	public void SendPacket(IPacket packet, Set<Socket> keySet) {
 		for(Socket s : keySet)
 			_packetsOut.add(new TransportPair(packet,s));
 		
 	}
 	
 
-	public void SendPacket(IPacket<?> packet,Socket[] socket,Socket excluded)
+	public void SendPacket(IPacket packet,Socket[] socket,Socket excluded)
 	{
 		for(int x =0; x < socket.length; x++)
 		{
@@ -131,7 +149,7 @@ public class PacketManager {
 		}
 	}
 	
-	public void SendPacket(IPacket<?> packet, Set<Socket> keySet,Socket excluded) {
+	public void SendPacket(IPacket packet, Set<Socket> keySet,Socket excluded) {
 		for(Socket s : keySet)
 		{
 			if(s != excluded)
@@ -141,11 +159,7 @@ public class PacketManager {
 		}
 		
 	}
-	
-	protected void RegisterPacket(IPacket<?> packet)
-	{
-		_packets.put(packet.Id(),packet);
-	}
+
 
 	//called when either a client has connected on either the server or client
 	public void OnConnected(ISocketConnect connection)
@@ -159,8 +173,9 @@ public class PacketManager {
 		_socketDisconnect = connection;
 	}
 
-	public void OnPacket(int id, IPacketCallback callback)
+	public<T extends IPacket> void OnPacket(int id, IPacketCallback callback)
 	{
+
         _packetCallback.put(id,callback);
 	}
 

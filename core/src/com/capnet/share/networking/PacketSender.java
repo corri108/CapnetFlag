@@ -1,5 +1,7 @@
 package com.capnet.share.networking;
 
+import com.capnet.share.networking.packets.PacketHeading;
+
 import java.io.IOException;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
@@ -31,12 +33,14 @@ public class PacketSender implements Runnable{
 					//add the length of the the collection plus the two ints
 					ByteBuffer buffer =  ByteBuffer.allocate(data.length + 4*3 +1);
 					buffer.put((byte)125);
-					buffer.putInt(tranportPair.Packet.Id());
+
+					int packetId = _packetManager._packet_id.get(tranportPair.Packet.getClass());
+					buffer.putInt(packetId);
 					buffer.putInt(data.length);
 					buffer.put(data);
 					buffer.rewind();
 					
-					System.out.println("Packing Packet ID:" + tranportPair.Packet.Id());
+					System.out.println("Packing Packet ID:" + packetId);
 					
 					byte[] out = new byte[buffer.remaining()];
 					buffer.get(out);

@@ -1,9 +1,9 @@
 package com.capnet.server;
 
-import com.capnet.game.Player;
+import com.capnet.share.Player;
 import com.capnet.share.networking.ISocketConnect;
 import com.capnet.share.networking.PacketManager;
-import com.capnet.share.networking.packets.Player_1;
+import com.capnet.share.networking.packets.Player_Simple_2;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -43,7 +43,7 @@ public class HostService {
             }
         });
         _manager.OnPacket(1, pair -> {
-            Player_1 pkt = (Player_1) pair.Packet;
+            Player_Simple_2 pkt = (Player_Simple_2) pair.Packet;
             //unbind the socket and move to player host
             _manager.UnbindSocket(pair.Out);
             _playerHost.RegisterClient(pair.Out,new Player());

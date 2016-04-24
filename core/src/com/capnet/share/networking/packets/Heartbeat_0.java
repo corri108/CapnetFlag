@@ -2,13 +2,9 @@ package com.capnet.share.networking.packets;
 
 import java.nio.ByteBuffer;
 
-public class Heartbeat_0 implements IPacket<Heartbeat_0> {
+@PacketHeading()
+public class Heartbeat_0 implements IPacket {
 
-
-	@Override
-	public IPacket<?> Instance() {
-		return new Heartbeat_0();
-	}
 
 	@Override
 	public ByteBuffer Encode() {
@@ -19,10 +15,5 @@ public class Heartbeat_0 implements IPacket<Heartbeat_0> {
 	@Override
 	public void Decode(ByteBuffer data) {
 
-	}
-
-	@Override
-	public int Id() {
-		return 0;
 	}
 }

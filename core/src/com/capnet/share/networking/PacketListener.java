@@ -7,11 +7,12 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import com.capnet.share.networking.packets.IPacket;
+import com.capnet.share.networking.packets.PacketHeading;
 
 public class PacketListener implements Runnable{
 	private Socket _socket = null;
 	private PacketManager _packetManager;
-	private Queue<IPacket<?>> _reprocess = new LinkedList<>();
+	private Queue<IPacket> _reprocess = new LinkedList<>();
 	PacketListener(Socket sock, PacketManager manager)
 	{
 		this._socket = sock;
@@ -47,18 +48,18 @@ public class PacketListener implements Runnable{
 
 						byte[] data = new byte[length];
 						stream.read(data);
-						IPacket<?> p = _packetManager.GetPacketInstance(id);
+						IPacket p = _packetManager.GetPacketInstance(id);
 						if(p != null)
 						{
 
 							p.Decode(ByteBuffer.wrap(data));
-
-							if(!_packetManager._packetCallback.containsKey(p.Id())) {
+							int packetId = _packetManager._packet_id.get(p.getClass());
+							if(!_packetManager._packetCallback.containsKey(packetId)) {
 								_reprocess.add(p);
 							}
 							else {
 								if (!Thread.currentThread().isInterrupted()) {
-									_packetManager._packetCallback.get(p.Id()).onPacket(new TransportPair(p, _socket));//.add(new TransportPair(p,_socket));
+									_packetManager._packetCallback.get(packetId).onPacket(new TransportPair(p, _socket));//.add(new TransportPair(p,_socket));
 								}
 							}
 
@@ -72,10 +73,12 @@ public class PacketListener implements Runnable{
 				}
 					//attempts to reprocess the packet if the handler isn't ready
 					if (_reprocess.size() > 0) {
-						IPacket<?> p = _reprocess.remove();
+						IPacket p = _reprocess.remove();
 						if (p != null) {
-							if (_packetManager._packetCallback.containsKey(p.Id()))
-								_packetManager._packetCallback.get(p.Id()).onPacket(new TransportPair(p, _socket));
+
+							int packetId = _packetManager._packet_id.get(p.getClass());
+							if (_packetManager._packetCallback.containsKey(packetId))
+								_packetManager._packetCallback.get(packetId).onPacket(new TransportPair(p, _socket));
 							else
 								_reprocess.add(p);
 						}

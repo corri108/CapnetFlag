@@ -1,6 +1,7 @@
 package com.capnet.share;
 
-import javafx.scene.shape.Rectangle;
+
+import com.badlogic.gdx.math.Rectangle;
 
 /**
  * Created by michaelpollind on 4/21/16.
@@ -12,9 +13,9 @@ public class Map {
         _rectangle = new Rectangle[number];
         for (int x = 0; x < number; x++) {
             Rectangle temp = new Rectangle();
-            temp.setX(Math.random() * width);
-            temp.setY(Math.random() * height);
-            temp.setRotate(Math.PI * Math.random());
+            //temp.setX(Math.random() * width);
+            //temp.setY(Math.random() * height);
+            //temp.setRotate(Math.PI * Math.random());
             _rectangle[x] = temp;
         }
 
