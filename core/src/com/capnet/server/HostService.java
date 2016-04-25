@@ -17,21 +17,21 @@ public class HostService {
 
     public HostService(int port) throws IOException {
         _manager.OnConnected(socket -> ((Runnable) () -> {
-            //wait 5 seconds for a client to connect else unbind them
+            //wait 15 seconds for a client to connect else unbind them
 
             try {
-                Thread.sleep(5000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-          /*  System.out.println("client has been disconnected due to being unresolved:" + socket);
+            System.out.println("client has been disconnected due to being unresolved:" + socket);
             if (_manager.UnbindSocket(socket)) {
                 try {
                     socket.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }*/
+            }
 
         }).run());
         _manager.OnPacket(pair -> {
