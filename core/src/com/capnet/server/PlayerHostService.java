@@ -2,13 +2,14 @@ package com.capnet.server;
 
 import com.capnet.share.BaseMap;
 import com.capnet.share.BasePlayerService;
+import com.capnet.share.Entities.Packets.PlayerInfo;
 import com.capnet.share.Entities.Player;
-import com.capnet.share.Entities.PlayerSimple;
+import com.capnet.share.Entities.Packets.PlayerSimple;
 import com.capnet.share.networking.PacketManager;
-import com.capnet.share.networking.packets.ClientHandshake;
+import com.capnet.share.packets.ClientHandshake;
 
+import java.io.IOException;
 import java.net.Socket;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,24 +23,24 @@ public class PlayerHostService extends BasePlayerService{
 
     private PacketManager _manager = new PacketManager();
 
-    public  PlayerHostService(BaseMap map)
-    {
+    public  PlayerHostService(BaseMap map) throws IOException {
         super(map);
 
         _manager.OnPacket(pair -> {
             _playerSocketMapping.get(pair.Out).Location = pair.Packet.position;
             _playerSocketMapping.get(pair.Out).Velocity = pair.Packet.velocity;
         }, PlayerSimple.class);
+        _manager.StartSocketSender();
 
     }
 
     public  void RegisterClient(Socket socket, Player player) {
         //send the player packet with the player id
-        _manager.SendPacket(new ClientHandshake(player.id),socket);
-        _manager.SendPacket(player,socket);
+        _manager.SendPacket(new ClientHandshake(player.GetPlayerId()),socket);
+        _manager.SendPacket(new PlayerInfo(player),socket);
 
         _playerSocketMapping.put(socket,player);
-        _playerCollection.put(player.id,player);
+        _playerCollection.put(player.GetPlayerId(),player);
         _manager.RegisterSocket(socket);
     }
 

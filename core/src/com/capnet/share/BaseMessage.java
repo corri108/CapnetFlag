@@ -1,7 +1,6 @@
 package com.capnet.share;
 
 import com.capnet.share.networking.PacketManager;
-import com.capnet.share.networking.packets.Message;
 
 /**
  * Created by michaelpollind on 4/25/16.

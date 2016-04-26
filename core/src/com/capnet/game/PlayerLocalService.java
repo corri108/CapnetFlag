@@ -1,14 +1,17 @@
 package com.capnet.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.capnet.share.BaseMap;
+import com.capnet.share.Entities.Packets.PlayerInfo;
 import com.capnet.share.Entities.Player;
 import com.capnet.share.BasePlayerService;
 import com.capnet.share.networking.PacketManager;
-import com.capnet.share.Entities.PlayerSimple;
-import com.capnet.share.networking.packets.ClientHandshake;
+import com.capnet.share.Entities.Packets.PlayerSimple;
+import com.capnet.share.packets.ClientHandshake;
 
 import java.net.Socket;
-import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by michaelpollind on 4/21/16.
@@ -16,24 +19,29 @@ import java.util.Iterator;
 public class PlayerLocalService extends BasePlayerService {
     private  int _playerOwned = -1;
     private Socket _server;
+    private PacketManager _manager;
 
     public PlayerLocalService(PacketManager manager, Socket server, BaseMap map) {
         super(map);
         _server = server;
+        _manager = manager;
         manager.OnPacket(pair -> {
-
+            //very simple player positon update but this can be fixed
+            Player p = _playerCollection.get(pair.Packet.PlayerId());
+            p.Location = pair.Packet.position;
+            p.Velocity = pair.Packet.velocity;
         },PlayerSimple.class);
 
         manager.OnPacket(pair -> {
-            _playerCollection.put(pair.Packet.id,pair.Packet);
-        }, Player.class);
+            _playerCollection.put(pair.Packet.GetPlayer().GetPlayerId(),pair.Packet.GetPlayer());
+        }, PlayerInfo.class);
 
         manager.OnPacket(pair -> {
             _playerOwned = pair.Packet.id;
 
         }, ClientHandshake.class);
 
-        manager.SendPacket(new Player(),server);
+        manager.SendPacket(new PlayerInfo(new Player()),server);
     }
 
     public Player GetOwnedPlayer()
@@ -41,12 +49,43 @@ public class PlayerLocalService extends BasePlayerService {
         return  _playerCollection.get(_playerOwned);
     }
 
-    public Iterator<Player> player_iterator()
+    @Override
+    public  void Update()
     {
-        return _playerCollection.values().iterator();
+        super.Update();
+
+        //this implementation should be temporary
+        Player current = this.GetOwnedPlayer();
+        if(current != null)
+        {
+            if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT))
+            {
+                current.Location.add(-.05f,0);
+            }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT))
+            {
+                current.Location.add(.05f,0);
+            }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
+            {
+                current.Location.add(0,.05f);
+            }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN))
+            {
+                current.Location.add(0,-.05f);
+            }
+
+            _manager.SendPacket(new PlayerSimple(current),_server);
+
+        }
+
     }
 
+    public  void Draw()
+    {
+        for (Map.Entry<Integer,Player> player: _playerCollection.entrySet()) {
+            player.getValue().Draw();
 
-
-
+        }
+    }
 }

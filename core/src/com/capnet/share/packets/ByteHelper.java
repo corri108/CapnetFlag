@@ -1,4 +1,4 @@
-package com.capnet.share.networking.packets;
+package com.capnet.share.packets;
 
 import com.badlogic.gdx.math.Vector2;
 

@@ -1,9 +1,8 @@
 package com.capnet.server;
 
 import com.capnet.share.BaseMessage;
-import com.capnet.share.BasePlayerService;
 import com.capnet.share.networking.PacketManager;
-import com.capnet.share.networking.packets.Message;
+import com.capnet.share.packets.Message;
 
 /**
  * Created by michaelpollind on 4/25/16.

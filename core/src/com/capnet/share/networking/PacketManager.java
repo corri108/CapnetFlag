@@ -1,11 +1,10 @@
 package com.capnet.share.networking;
 
-import com.capnet.share.networking.packets.IPacket;
+import com.capnet.share.packets.IPacket;
 
 import org.reflections.Reflections;
 
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;

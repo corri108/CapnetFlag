@@ -1,6 +1,7 @@
 package com.capnet.server;
 
 import com.capnet.share.BaseMap;
+import com.capnet.share.Entities.Packets.PlayerInfo;
 import com.capnet.share.Entities.Player;
 import com.capnet.share.BasePlayerService;
 import com.capnet.share.networking.PacketManager;
@@ -41,15 +42,15 @@ public class HostService  {
         }).run());
         _manager.OnPacket(pair -> {
             _playerId++;
-            System.out.println("host connected with name:" + pair.Packet.name);
+            System.out.println("host connected with name:" + pair.Packet.GetPlayer().GetName());
             //unbind the socket and move to player host
             _manager.UnbindSocket(pair.Out);
 
             //set a new id
-            pair.Packet.id = _playerId;
+            pair.Packet.GetPlayer().SetId(_playerId);
             //register the client
-            _playerHost.RegisterClient(pair.Out,pair.Packet);
-        },Player.class);
+            _playerHost.RegisterClient(pair.Out,pair.Packet.GetPlayer());
+        },PlayerInfo.class);
 
 
         _manager.StartSocketSender();

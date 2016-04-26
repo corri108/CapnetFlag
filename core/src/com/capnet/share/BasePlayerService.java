@@ -4,6 +4,7 @@ import com.capnet.share.Entities.Player;
 import com.capnet.share.networking.PacketManager;
 
 import java.net.Socket;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -11,8 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BasePlayerService {
     protected ConcurrentHashMap<Integer,Player> _playerCollection = new ConcurrentHashMap<>();
-    protected  boolean _isServer = false;
-
     public BasePlayerService(BaseMap map)
     {
 
@@ -27,4 +26,11 @@ public class BasePlayerService {
     {
         return _playerCollection.get(id);
     }
+
+    public Iterator<Player> player_iterator()
+    {
+        return _playerCollection.values().iterator();
+    }
+
+
 }

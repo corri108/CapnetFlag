@@ -1,4 +1,4 @@
-package com.capnet.share.networking.packets;
+package com.capnet.share.packets;
 
 import com.capnet.share.Entities.Player;
 
@@ -21,7 +21,7 @@ public class Message implements IPacket {
     }
     public  Message(Player player, String message)
     {
-        this.PlayerId = player.id;
+        this.PlayerId = player.GetPlayerId();
         this.Message = message;
     }
     @Override

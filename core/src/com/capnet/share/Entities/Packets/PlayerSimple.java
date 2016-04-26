@@ -1,7 +1,8 @@
-package com.capnet.share.Entities;
+package com.capnet.share.Entities.Packets;
 
 import com.badlogic.gdx.math.Vector2;
-import com.capnet.share.networking.packets.IPacket;
+import com.capnet.share.Entities.Player;
+import com.capnet.share.packets.IPacket;
 
 import java.nio.ByteBuffer;
 
@@ -22,13 +23,13 @@ public class PlayerSimple implements IPacket {
 
     public PlayerSimple(Player player)
     {
-        Id = player.id;
+        Id = player.GetPlayerId();
         position = player.Location;
         velocity = player.Location;
 
     }
 
-    public int GetId()
+    public int PlayerId()
     {
         return Id;
     }

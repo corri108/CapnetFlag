@@ -82,15 +82,12 @@ public class MainMenuScreen implements Screen {
                 packetManager.OnConnected(socket -> {
                     main.setScreen(new GameScreen(main,packetManager,socket));
                 });
+                packetManager.RegisterSocket(ipAddress,port);
                 try {
                     packetManager.StartSocketSender();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-                packetManager.RegisterSocket(ipAddress,port);
-
-
-
 
                 Gdx.app.log("Click", "performed"); // -> never happend
             }

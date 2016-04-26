@@ -1,6 +1,6 @@
 package com.capnet.share.Entities;
 
-import com.capnet.share.networking.packets.IPacket;
+import com.capnet.share.packets.IPacket;
 
 import java.nio.ByteBuffer;
 
