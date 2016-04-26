@@ -36,15 +36,17 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        _playerManager.Update();
         Player p = _playerManager.GetOwnedPlayer();
         if(p != null)
             _camera.position.set(p.Location.x,p.Location.y,0);
 
-        _camera.update();
         _batch.setProjectionMatrix(_camera.combined);
+        _camera.update();
+
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         _batch.begin();
-        _playerManager.Update();
         _playerManager.Draw();
         _batch.end();
     }

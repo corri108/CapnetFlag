@@ -57,9 +57,14 @@ public class Player{
         if(shape  == null)
             shape =new ShapeRenderer();
 
-        shape.begin(ShapeRenderer.ShapeType.Filled);
-        shape.setColor(Color.PINK);
-        shape.circle(Location.x,Location.y,3);
+      //  shape.begin(ShapeRenderer.ShapeType.Filled);
+       // shape.setColor(Color.PINK);
+       // shape.circle(Location.x,Location.y,3);
+        //shape.end();
+
+        shape.begin(ShapeRenderer.ShapeType.Line);
+        shape.setColor(1, 1, 0, 1);
+        shape.circle(0, 0, 100);
         shape.end();
 
     }
