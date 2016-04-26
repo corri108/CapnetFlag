@@ -40,6 +40,7 @@ public class MainMenuScreen implements Screen {
     private TextField _portField;
     private BitmapFont _font;
     private TextButtonStyle _buttonStyle;
+    private TextButtonStyle _toggledButtonStyle;
     private Button _isHostToggle;
 
 
@@ -58,7 +59,13 @@ public class MainMenuScreen implements Screen {
         _buttonStyle.font = _font;
         _buttonStyle.up = uiSkin.getDrawable("default-round");
         _buttonStyle.down = uiSkin.getDrawable("default-round-down");
-        _buttonStyle.checked = uiSkin.getDrawable("default-round");
+        _buttonStyle.checked = uiSkin.getDrawable("default-round-down");
+
+        _toggledButtonStyle = new TextButtonStyle();
+        _toggledButtonStyle.font = _font;
+        _toggledButtonStyle.up = uiSkin.getDrawable("default-round");
+        _toggledButtonStyle.down = uiSkin.getDrawable("default-round-down");
+        _toggledButtonStyle.checked = uiSkin.getDrawable("default-round");
         //end style
 
         //button connect
@@ -114,11 +121,15 @@ public class MainMenuScreen implements Screen {
         _isHostToggle.toggle();
         _isHostToggle.setWidth(400);
         _isHostToggle.setHeight(15);
-
-
         _isHostToggle.setStyle(_buttonStyle);
 
-
+        //host
+        TextField hostField;
+        //host
+        hostField = new TextField("Host?", uiSkin);
+        hostField.setPosition(120,100);
+        hostField.setWidth(400);
+        hostField.setHeight(15);
 
         TextField titleField;
         //title
@@ -135,6 +146,7 @@ public class MainMenuScreen implements Screen {
         _stage.addActor(_portField);
         _stage.addActor(_isHostToggle);
         _stage.addActor(titleField);
+        _stage.addActor(hostField);
 
         Gdx.input.setInputProcessor(_stage);
     }
