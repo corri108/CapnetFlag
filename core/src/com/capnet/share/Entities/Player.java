@@ -12,6 +12,8 @@ import java.nio.ByteBuffer;
 public class Player implements IPacket{
     public Vector2 Location= new Vector2();
     public Vector2 Velocity = new Vector2();
+    
+
     public  int id = 10; //used for the server to communicate with players
     public  String name = "hello this is  a test";
 

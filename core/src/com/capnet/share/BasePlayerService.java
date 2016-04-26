@@ -22,4 +22,9 @@ public class BasePlayerService {
     {
 
     }
+
+    public  Player GetPlayer(int id)
+    {
+        return _playerCollection.get(id);
+    }
 }

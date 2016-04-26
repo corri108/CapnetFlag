@@ -11,8 +11,8 @@ import java.nio.ByteBuffer;
 
 public class PlayerSimple implements IPacket {
     private  int Id;
-    public Vector2 _position;
-    public Vector2 _velocity;
+    public Vector2 position;
+    public Vector2 velocity;
 
 
     public PlayerSimple()
@@ -23,8 +23,8 @@ public class PlayerSimple implements IPacket {
     public PlayerSimple(Player player)
     {
         Id = player.id;
-        _position = player.Location;
-        _velocity = player.Location;
+        position = player.Location;
+        velocity = player.Location;
 
     }
 

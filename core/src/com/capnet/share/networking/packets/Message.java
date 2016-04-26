@@ -1,5 +1,7 @@
 package com.capnet.share.networking.packets;
 
+import com.capnet.share.Entities.Player;
+
 import java.nio.ByteBuffer;
 
 /**
@@ -7,6 +9,7 @@ import java.nio.ByteBuffer;
  */
 public class Message implements IPacket {
     public  String Message;
+    public  int PlayerId = -1;
 
     public  Message()
     {
@@ -16,15 +19,22 @@ public class Message implements IPacket {
     {
         this.Message = message;
     }
+    public  Message(Player player, String message)
+    {
+        this.PlayerId = player.id;
+        this.Message = message;
+    }
     @Override
     public ByteBuffer Encode() {
-        ByteBuffer buffer = ByteBuffer.allocate(ByteHelper.SizeOfString(Message));
+        ByteBuffer buffer = ByteBuffer.allocate(ByteHelper.INT + ByteHelper.SizeOfString(Message));
+        buffer.putInt( this.PlayerId);
         ByteHelper.EncodeString(buffer,Message);
         return buffer;
     }
 
     @Override
     public void Decode(ByteBuffer data) {
+        PlayerId = data.getInt();
         Message = ByteHelper.DecodeString(data);
     }
 }

@@ -28,8 +28,9 @@ public class HostService  {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("client has been disconnected due to being unresolved:" + socket);
+
             if (_manager.UnbindSocket(socket)) {
+                System.out.println("client has been disconnected due to being unresolved:" + socket);
                 try {
                     socket.close();
                 } catch (IOException e) {
