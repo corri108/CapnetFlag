@@ -1,5 +1,7 @@
 package com.capnet.share.Entities;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.capnet.share.packets.ByteHelper;
 import com.capnet.share.packets.IPacket;
@@ -17,7 +19,7 @@ public class Player{
 
 
     // rendering will not work with this setup. packets have to be separated from the client
-   // private ShapeRenderer shape = new ShapeRenderer();
+    private ShapeRenderer shape = null;
 
     private int id = 10; //used for the server to communicate with players
     private String name = "hello this is  a test";
@@ -33,6 +35,8 @@ public class Player{
     {
 
     }
+
+
     public  void  SetId(int id)
     {
         this.id = id;
@@ -50,11 +54,14 @@ public class Player{
 
     public void Draw()
     {
-       /* shape.begin(ShapeRenderer.ShapeType.Point);
+        if(shape  == null)
+            shape =new ShapeRenderer();
+
+        shape.begin(ShapeRenderer.ShapeType.Filled);
         shape.setColor(Color.PINK);
         shape.circle(Location.x,Location.y,3);
         shape.end();
-*/
+
     }
 
 
