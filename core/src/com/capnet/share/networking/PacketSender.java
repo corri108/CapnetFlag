@@ -40,7 +40,7 @@ public class PacketSender implements Runnable{
 					buffer.put(data);
 					buffer.rewind();
 					
-					System.out.println("Packing Packet ID:" + packetId);
+					//System.out.println("Packing Packet ID:" + packetId);
 					
 					byte[] out = new byte[buffer.remaining()];
 					buffer.get(out);

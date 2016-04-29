@@ -21,5 +21,10 @@ public class HostMap extends BaseMap{
         this._manager = manager;
     }
 
+    public  HostMap()
+    {
+
+    }
+
 
 }

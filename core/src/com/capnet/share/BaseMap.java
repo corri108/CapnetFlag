@@ -26,12 +26,13 @@ public class BaseMap implements IPacket{
     //makes a random level with a random color out of the 6 prim/secondary colors
     public BaseMap()
     {
+        squares = new ArrayList(NUM_SQUARES + 1);
         myRand = new Random();
     }
 
     public void GenerateMap()
     {
-        squares = new ArrayList(NUM_SQUARES + 1);
+
         this.baseColor = getRandColor();
         randomize();
 

@@ -43,7 +43,7 @@ public class PacketListener implements Runnable{
 						int id = packetHeader.getInt();
 						int length = packetHeader.getInt();
 
-						System.out.println("Recieved packet with ID:"+id);
+						//System.out.println("Recieved packet with ID:"+id);
 
 						byte[] data = new byte[length];
 						stream.read(data);

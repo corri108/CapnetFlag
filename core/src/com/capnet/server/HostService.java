@@ -15,11 +15,15 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class HostService  {
 
+    private  BaseMap _map;
     private  PacketManager _manager = new PacketManager();
-    private  PlayerHostService _playerHost = new PlayerHostService(new BaseMap());
+    private  PlayerHostService _playerHost;
     private  int _playerId = 0;
 
     public HostService(int port) throws IOException {
+        _map = new HostMap(_manager);
+        _map.GenerateMap();
+        _playerHost = new PlayerHostService(_map);
 
         _manager.OnConnected(socket -> ((Runnable) () -> {
             //wait 15 seconds for a client to connect else unbind them

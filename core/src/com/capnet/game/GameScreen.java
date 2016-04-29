@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.capnet.server.HostMap;
 import com.capnet.share.BaseMap;
 import com.capnet.share.Entities.Player;
 import com.capnet.share.networking.PacketManager;
@@ -16,7 +17,7 @@ import java.net.Socket;
  */
 public class GameScreen implements Screen {
     private PlayerLocalService _playerManager ;
-    private LocalGameMap _map;
+    private BaseMap _map;
     private OrthographicCamera _camera;
     private SpriteBatch _batch;
 
@@ -24,7 +25,11 @@ public class GameScreen implements Screen {
     public  GameScreen(Main main, PacketManager manager, Socket serverSocket)
     {
         _batch = new SpriteBatch();
-        _map= new LocalGameMap();
+        manager.OnPacket(pair -> {
+
+            _map = pair.Packet;
+        },HostMap.class);
+
         _playerManager = new PlayerLocalService(manager,serverSocket,_map);
     }
 
@@ -49,6 +54,9 @@ public class GameScreen implements Screen {
         _batch.begin();
         _playerManager.Draw();
         _batch.end();
+        if(_map != null)
+            _map.draw(_batch,1.0f);
+        
     }
 
     @Override
