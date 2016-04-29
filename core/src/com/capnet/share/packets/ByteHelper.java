@@ -1,5 +1,6 @@
 package com.capnet.share.packets;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import java.nio.ByteBuffer;
@@ -14,6 +15,24 @@ public  class ByteHelper {
     public static final int BOOL = 1;
     public static final int FLOAT = 4;
     public static final int VECTOR2 = FLOAT*2;
+    public static final int COLOR = FLOAT*4;
+
+    public static void EncodeColor(ByteBuffer buffer,Color color)
+    {
+        buffer.putFloat(color.r);
+        buffer.putFloat(color.g);
+        buffer.putFloat(color.b);
+        buffer.putFloat(color.a);
+    }
+
+    public static Color DecodeColor(ByteBuffer buffer)
+    {
+        float r = buffer.getFloat();
+        float g = buffer.getFloat();
+        float b = buffer.getFloat();
+        float a = buffer.getFloat();
+        return  new Color(r,g,b,a);
+    }
 
     public static void EncodeVector2(ByteBuffer buffer,Vector2 input)
     {

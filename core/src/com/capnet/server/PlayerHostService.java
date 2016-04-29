@@ -42,6 +42,8 @@ public class PlayerHostService extends BasePlayerService{
         _playerSocketMapping.put(socket,player);
         _playerCollection.put(player.GetPlayerId(),player);
         _manager.RegisterSocket(socket);
+
+        _manager.SendPacket(map,socket);
     }
 
 
