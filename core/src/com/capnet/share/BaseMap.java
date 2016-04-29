@@ -2,6 +2,7 @@ package com.capnet.share;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.capnet.share.packets.ByteHelper;
 import com.capnet.share.packets.IPacket;
 
 import java.nio.ByteBuffer;
@@ -162,7 +163,8 @@ public class BaseMap implements IPacket{
         for (int x = 0; x < squares.size(); x++)
             size += squares.get(x).size();
 
-        ByteBuffer buffer = ByteBuffer.allocate(size);
+        ByteBuffer buffer = ByteBuffer.allocate(ByteHelper.INT+size);
+        buffer.putInt(squares.size());
         for (int x = 0; x < squares.size(); x++)
             squares.get(x).Encode(buffer);
 
@@ -173,9 +175,13 @@ public class BaseMap implements IPacket{
     public void Decode(ByteBuffer data) {
         squares.clear();
 
-        MySquare square = new MySquare();
-        square.Decode(data);
-        squares.add(square);
+        int size = data.getInt();
+        for(int x = 0; x < size; x++)
+        {
+            MySquare square = new MySquare();
+            square.Decode(data);
+            squares.add(square);
+        }
 
     }
 }

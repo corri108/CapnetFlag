@@ -55,8 +55,8 @@ public class GameScreen implements Screen {
         _playerManager.Draw();
         _batch.end();
         if(_map != null)
-            _map.draw(_batch,1.0f);
-        
+            _map.draw(_batch,1f);
+
     }
 
     @Override
