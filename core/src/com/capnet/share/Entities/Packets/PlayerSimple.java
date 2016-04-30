@@ -26,7 +26,7 @@ public class PlayerSimple implements IPacket {
     {
         Id = player.GetPlayerId();
         position = player.Location;
-        velocity = player.Location;
+        velocity = player.Velocity;
 
     }
 

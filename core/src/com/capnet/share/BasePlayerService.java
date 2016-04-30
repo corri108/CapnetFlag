@@ -1,5 +1,8 @@
 package com.capnet.share;
 
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
+import com.capnet.game.InputHandle;
 import com.capnet.share.Entities.Player;
 
 import java.util.Iterator;
@@ -10,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BasePlayerService {
     protected ConcurrentHashMap<Integer,Player> _playerCollection = new ConcurrentHashMap<>();
+    protected  static  final  float PLAYER_BASE_VELOCITY = 20.0f;
     protected Map map;
     public BasePlayerService(Map map)
     {
@@ -22,7 +26,11 @@ public class BasePlayerService {
      */
     public void Update(float delta)
     {
+        for (java.util.Map.Entry<Integer,Player> player: _playerCollection.entrySet()) {
 
+            Vector2 velocity = new Vector2(player.getValue().Velocity.x* delta,player.getValue().Velocity.y* delta);
+            player.getValue().Location = player.getValue().Location.add(velocity);
+        }
     }
 
     /**
@@ -33,6 +41,8 @@ public class BasePlayerService {
     {
 
     }
+
+
 
     public  Player GetPlayer(int id)
     {

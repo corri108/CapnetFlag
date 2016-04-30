@@ -25,20 +25,17 @@ public class Server {
 
             long last_time = System.nanoTime();
             while (true) {
-                float delay = (1000f/25f) - ((System.nanoTime() - last_time) / 1000000);
-                if(delay> 0)
-                    try {
-                        Thread.sleep((long) delay);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
                 long time = System.nanoTime();
-                float delta_time =  ((time - last_time) / 1000000);
+                float delta_time =  ((time - last_time) / 1000000000.0f);
                 last_time = time;
 
                 //update look and tick
                 _playerHost.Update(delta_time);
+                try {
+                    Thread.sleep(40);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
         });

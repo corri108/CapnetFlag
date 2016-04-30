@@ -1,5 +1,9 @@
 package com.capnet.server;
 
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
+import com.capnet.game.InputHandle;
+import com.capnet.share.Entities.InputSnapshot;
 import com.capnet.share.Map;
 import com.capnet.share.BasePlayerService;
 import com.capnet.share.Entities.Packets.PlayerInfo;
@@ -29,6 +33,22 @@ public class PlayerHostService extends BasePlayerService{
             _playerSocketMapping.get(pair.Out).Location = pair.Packet.position;
             _playerSocketMapping.get(pair.Out).Velocity = pair.Packet.velocity;
         }, PlayerSimple.class);
+
+        _manager.OnPacket(pair -> {
+
+            Player p =  _playerSocketMapping.get(pair.Out);
+
+            if(pair.Packet.GetKey() == Input.Keys.A)
+                p.Velocity = new Vector2(-PLAYER_BASE_VELOCITY * (pair.Packet.IsPressed() == true ? 1 : 0),  p.Velocity.y);
+            if(pair.Packet.GetKey() == Input.Keys.W)
+                p.Velocity = new Vector2(p.Velocity.x, PLAYER_BASE_VELOCITY * (pair.Packet.IsPressed() == true ? 1 : 0));
+            if(pair.Packet.GetKey() == Input.Keys.D)
+                p.Velocity = new Vector2(PLAYER_BASE_VELOCITY * (pair.Packet.IsPressed() == true ? 1 : 0), p.Velocity.y);
+            if(pair.Packet.GetKey() == Input.Keys.S)
+                p.Velocity =  new Vector2(p.Velocity.x, -PLAYER_BASE_VELOCITY * (pair.Packet.IsPressed() == true ? 1 : 0));
+
+            System.out.println( p.Velocity.x + "," +  p.Velocity.y);
+        }, InputSnapshot.class);
         _manager.StartSocketSender();
 
     }
@@ -36,12 +56,20 @@ public class PlayerHostService extends BasePlayerService{
     public  void RegisterClient(Socket socket, Player player) {
         //send the player packet with the player id
         _manager.SendPacket(new ClientHandshake(player.GetPlayerId()),socket);
-        _manager.SendPacket(new PlayerInfo(player),socket);
 
         _playerSocketMapping.put(socket,player);
         _playerCollection.put(player.GetPlayerId(),player);
         _manager.RegisterSocket(socket);
 
+
+        //send the players the new player
+        _manager.SendPacket(new PlayerInfo(player),_playerSocketMapping.keySet(),socket);
+        for (java.util.Map.Entry<Socket,Player> iter : _playerSocketMapping.entrySet())
+        {
+            _manager.SendPacket(new PlayerInfo(iter.getValue()),socket);
+        }
+
+        //send the player the map
         _manager.SendPacket(map,socket);
     }
 

@@ -2,6 +2,7 @@ package com.capnet.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
 import com.capnet.share.Map;
 import com.capnet.share.Entities.Packets.PlayerInfo;
 import com.capnet.share.Entities.Player;
@@ -19,6 +20,11 @@ public class PlayerLocalService extends BasePlayerService {
     private  int _playerOwned = -1;
     private Socket _server;
     private PacketManager _manager;
+
+    private  InputHandle left;
+    private  InputHandle up;
+    private  InputHandle right;
+    private  InputHandle down;
 
     public PlayerLocalService(PacketManager manager, Socket server, Map map) {
         super(map);
@@ -43,6 +49,11 @@ public class PlayerLocalService extends BasePlayerService {
         }, ClientHandshake.class);
 
         manager.SendPacket(new PlayerInfo(new Player()),server);
+
+        left = new InputHandle(Input.Keys.A,manager,server);
+        up = new InputHandle(Input.Keys.W,manager,server);
+        right = new InputHandle(Input.Keys.D,manager,server);
+        down = new InputHandle(Input.Keys.S,manager,server);
     }
 
     public Player GetOwnedPlayer()
@@ -55,32 +66,20 @@ public class PlayerLocalService extends BasePlayerService {
     {
         super.Update(delta);
 
-        //this implementation should be temporary
-        Player current = this.GetOwnedPlayer();
-        if(current != null)
-        {
-            if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
-            {
+        Player p = this.GetOwnedPlayer();
+        if(p != null) {
+            if (left.Update())
+                p.Velocity = new Vector2(-PLAYER_BASE_VELOCITY * (left.IsPressed() == true ? 1 : 0),  p.Velocity.y);
+            if(up.Update())
+               p.Velocity = new Vector2(p.Velocity.x, PLAYER_BASE_VELOCITY * (up.IsPressed() == true ? 1 : 0));
+            if(right.Update())
+               p.Velocity = new Vector2(PLAYER_BASE_VELOCITY * (right.IsPressed() == true ? 1 : 0),p.Velocity.y);
 
-                current.Location = current.Location.add(-.5f,0);
-            }
-            if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-            {
-                current.Location =current.Location.add(.5f,0);
-            }
-            if(Gdx.input.isKeyPressed(Input.Keys.UP))
-            {
-                current.Location =current.Location.add(0,.5f);
-            }
-            if(Gdx.input.isKeyPressed(Input.Keys.DOWN))
-            {
-                current.Location =current.Location.add(0,-.5f);
-            }
+            if(down.Update())
+                p.Velocity =  new Vector2(p.Velocity.x, -PLAYER_BASE_VELOCITY * (down.IsPressed() == true ? 1 : 0));
 
-            _manager.SendPacket(new PlayerSimple(current),_server);
 
         }
-
     }
 
     public  void Draw()
