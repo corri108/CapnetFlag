@@ -27,8 +27,10 @@ public class PlayerLocalService extends BasePlayerService {
         manager.OnPacket(pair -> {
             //very simple player positon update but this can be fixed
             Player p = _playerCollection.get(pair.Packet.PlayerId());
-            p.Location = pair.Packet.position;
-            p.Velocity = pair.Packet.velocity;
+            if(p != null) {
+                p.Location = pair.Packet.position;
+                p.Velocity = pair.Packet.velocity;
+            }
         },PlayerSimple.class);
 
         manager.OnPacket(pair -> {
@@ -49,29 +51,30 @@ public class PlayerLocalService extends BasePlayerService {
     }
 
     @Override
-    public  void Update()
+    public  void Update(float delta)
     {
-        super.Update();
+        super.Update(delta);
 
         //this implementation should be temporary
         Player current = this.GetOwnedPlayer();
         if(current != null)
         {
-            if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT))
+            if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
             {
-                current.Location.add(-.05f,0);
+
+                current.Location = current.Location.add(-.5f,0);
             }
-            if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT))
+            if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))
             {
-                current.Location.add(.05f,0);
+                current.Location =current.Location.add(.5f,0);
             }
-            if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
+            if(Gdx.input.isKeyPressed(Input.Keys.UP))
             {
-                current.Location.add(0,.05f);
+                current.Location =current.Location.add(0,.5f);
             }
-            if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN))
+            if(Gdx.input.isKeyPressed(Input.Keys.DOWN))
             {
-                current.Location.add(0,-.05f);
+                current.Location =current.Location.add(0,-.5f);
             }
 
             _manager.SendPacket(new PlayerSimple(current),_server);

@@ -16,7 +16,20 @@ public class BasePlayerService {
         this.map = map;
     }
 
-    public void Update()
+    /**
+     * general update for entities
+     * @param delta
+     */
+    public void Update(float delta)
+    {
+
+    }
+
+    /**
+     * functions at a lower tick rate
+     * @param delta
+     */
+    public void PacketUpdate(float delta)
     {
 
     }

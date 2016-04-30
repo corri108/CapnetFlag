@@ -45,7 +45,7 @@ public class PacketSender implements Runnable{
 					byte[] out = new byte[buffer.remaining()];
 					buffer.get(out);
 					tranportPair.Out.getOutputStream().write(out);
-					
+
 			
 					
 				}
@@ -69,7 +69,7 @@ public class PacketSender implements Runnable{
 					//sleep for a moment and then try to collect packets
 					//TODO: really poor practice to spin on the thread like this
 					try {
-						Thread.sleep(200);
+						Thread.sleep(10);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

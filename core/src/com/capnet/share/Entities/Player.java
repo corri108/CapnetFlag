@@ -21,7 +21,7 @@ public class Player{
     // rendering will not work with this setup. packets have to be separated from the client
     private ShapeRenderer shape = null;
 
-    private int id = 10; //used for the server to communicate with players
+    private int id = -1; //used for the server to communicate with players
     private String name = "hello this is  a test";
 
     public Player(int id, String name)
@@ -64,7 +64,7 @@ public class Player{
 
         shape.begin(ShapeRenderer.ShapeType.Line);
         shape.setColor(1, 1, 0, 1);
-        shape.circle(0, 0, 100);
+        shape.circle(Location.x, Location.y, 100);
         shape.end();
 
     }

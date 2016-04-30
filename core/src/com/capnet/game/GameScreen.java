@@ -50,7 +50,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        _playerManager.Update();
+        _playerManager.Update(delta);
         Player p = _playerManager.GetOwnedPlayer();
         if(p != null)
             _camera.position.set(p.Location.x,p.Location.y,0);

@@ -67,7 +67,7 @@ public class PacketListener implements Runnable{
 				}
 				else {
 
-					Thread.sleep(200);
+					Thread.sleep(10);
 				}
 					//attempts to reprocess the packet if the handler isn't ready
 					if (_reprocess.size() > 0) {

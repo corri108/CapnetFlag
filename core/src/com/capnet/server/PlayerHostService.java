@@ -48,7 +48,7 @@ public class PlayerHostService extends BasePlayerService{
 
 
     @Override
-    public  void  Update()
+    public  void  Update(float delta)
     {
         //loop through the players and send updated positions
         for (java.util.Map.Entry<Socket,Player> iter : _playerSocketMapping.entrySet())
@@ -57,7 +57,7 @@ public class PlayerHostService extends BasePlayerService{
             _manager.SendPacket(new PlayerSimple(iter.getValue()),_playerSocketMapping.keySet());
 
         }
-        super.Update();
+        super.Update(delta);
     }
 
     public Player GetPlayer(Socket s)

@@ -21,7 +21,29 @@ public class Server {
         _map.GenerateMap();
         _playerHost = new PlayerHostService(_map);
 
-        
+        Runnable run = ((Runnable) () -> {
+
+            long last_time = System.nanoTime();
+            while (true) {
+                float delay = (1000f/25f) - ((System.nanoTime() - last_time) / 1000000);
+                if(delay> 0)
+                    try {
+                        Thread.sleep((long) delay);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                long time = System.nanoTime();
+                float delta_time =  ((time - last_time) / 1000000);
+                last_time = time;
+
+                //update look and tick
+                _playerHost.Update(delta_time);
+            }
+
+        });
+        Thread thread = new Thread(run);
+        thread.start();
 
         _manager.OnConnected(socket -> ((Runnable) () -> {
             //wait 15 seconds for a client to connect else unbind them
