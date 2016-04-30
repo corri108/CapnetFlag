@@ -41,106 +41,58 @@ public class Map implements IPacket{
 
     private Color getRandColor()
     {
-        int r = myRand.nextInt(6);
+//        int r = myRand.nextInt(6);
+//
+//        if(r == 0)
+//        {
+//            return Color.RED;
+//        }
+//        else if(r == 1)
+//        {
+//            return Color.GREEN;
+//        }
+//        else if(r == 2)
+//        {
+//            return Color.BLUE;
+//        }
+//        else if(r == 3)
+//        {
+//            shaderThresh *= .5f;
+//            return Color.YELLOW;
+//        }
+//        else if(r == 4)
+//        {
+//            shaderThresh *= .5f;
+//            return Color.ORANGE;
+//        }
+//        else if(r == 5)
+//        {
+//            shaderThresh *= .5f;
+//            return Color.PURPLE;
+//        }
 
-        if(r == 0)
-        {
-            return Color.RED;
-        }
-        else if(r == 1)
-        {
-            return Color.GREEN;
-        }
-        else if(r == 2)
-        {
-            return Color.BLUE;
-        }
-        else if(r == 3)
-        {
-            shaderThresh *= .5f;
-            return Color.YELLOW;
-        }
-        else if(r == 4)
-        {
-            shaderThresh *= .5f;
-            return Color.ORANGE;
-        }
-        else if(r == 5)
-        {
-            shaderThresh *= .5f;
-            return Color.PURPLE;
-        }
-
-        return Color.WHITE;
+        return Color.ORANGE;
     }
 
     private void randomize()
     {
         //first the background color square
-        MySquare bg = new MySquare(-20, -20, 800, 600, baseColor);
-        squares.add(bg);
+        //MySquare bg = new MySquare(-20, -20, 800, 600, Color.BLACK);
+        //squares.add(bg);
 
         for(int i = 0; i < NUM_SQUARES; ++i)
         {
             //make rand position and bounds
             int rX = myRand.nextInt(621) - 20;
             int rY = myRand.nextInt(501) - 20;
-            int rW = myRand.nextInt(MAX_WIDTH - MIN_WIDTH) + MIN_WIDTH;
-            int rH = myRand.nextInt(MAX_HEIGHT - MIN_HEIGHT) + MIN_HEIGHT;
+            int size = myRand.nextInt(MAX_WIDTH - MIN_WIDTH) + MIN_WIDTH;
             boolean darker = true;// myRand.nextBoolean();
 
             //set random color newC for use
-            Color newC = new Color(baseColor);
-
-            if(darker)
-            {
-                //make a darker shade of color
-                if(baseColor == Color.GREEN)
-                    newC.g -= myRand.nextFloat() * shaderThresh;
-                else if(baseColor == Color.RED)
-                    newC.r -= myRand.nextFloat() * shaderThresh;
-                else if(baseColor == Color.BLUE)
-                    newC.b -= myRand.nextFloat() * shaderThresh;
-
-                else if(baseColor == Color.YELLOW) {
-                    newC.r -= myRand.nextFloat() * shaderThresh;
-                    newC.g -= myRand.nextFloat() * shaderThresh;
-                }
-                else if(baseColor == Color.PURPLE) {
-                    newC.r -= myRand.nextFloat() * shaderThresh;
-                    newC.b -= myRand.nextFloat() * shaderThresh;
-                }
-                else if(baseColor == Color.ORANGE) {
-                    newC.r -= myRand.nextFloat() * shaderThresh;
-                    newC.g -= myRand.nextFloat() * shaderThresh;
-                }
-            }
-            else
-            {
-                //make a lighter shade of color
-                float rO = myRand.nextFloat() * shaderThresh;
-                if(baseColor == Color.GREEN) {
-                    newC.r += rO;
-                    newC.b += rO;
-                }
-                else if(baseColor == Color.RED) {
-                    newC.g += rO;
-                    newC.b += rO;
-                }
-                else if(baseColor == Color.BLUE) {
-                    newC.r += rO;
-                    newC.g += rO;
-                }
-                else if(baseColor == Color.YELLOW)
-                    newC.b -= myRand.nextFloat() * shaderThresh;
-                else if(baseColor == Color.PURPLE)
-                    newC.g -= myRand.nextFloat() * shaderThresh;
-                else if(baseColor == Color.ORANGE)
-                    newC.b -= myRand.nextFloat() * shaderThresh;
-            }
+            Color color = new Color();
 
             //create square and add to arraylist
-            MySquare s = new MySquare(rX, rY, rW, rH, newC);
+            MySquare s = new MySquare(rX, rY, size, myRand.nextInt(360), myRand.nextInt(3));
             squares.add(s);
         }
 

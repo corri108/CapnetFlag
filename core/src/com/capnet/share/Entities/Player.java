@@ -62,9 +62,9 @@ public class Player{
        // shape.circle(Location.x,Location.y,3);
         //shape.end();
 
-        shape.begin(ShapeRenderer.ShapeType.Line);
+        shape.begin(ShapeRenderer.ShapeType.Filled);
         shape.setColor(1, 1, 0, 1);
-        shape.circle(Location.x, Location.y, 100);
+        shape.circle(Location.x, Location.y, 5);
         shape.end();
 
     }

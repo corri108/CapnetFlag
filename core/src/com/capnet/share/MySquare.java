@@ -3,11 +3,12 @@ package com.capnet.share;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.capnet.share.packets.ByteHelper;
-import com.capnet.share.packets.IPacket;
+
 
 import java.nio.ByteBuffer;
 
@@ -16,25 +17,32 @@ import java.nio.ByteBuffer;
  */
 public class MySquare extends Actor
 {
+    public static final int SLOW = 0;
+    public static final int MEDIUM= 1;
+    public static final int FAST= 2;
+
+    public static  final  Color SLOW_COLOR = new Color(246/255f,251/255f,150/255f,255/255f);
+    public static  final  Color MEDIUM_COLOR = new Color(155/255f,158/255f,104/255f,255/255f);
+    public static  final  Color FAST_COLOR = new Color(42/255f,43/255f,31/255f,255/255f);
+
     private ShapeRenderer shapeRenderer;
-    static private boolean projectionMatrixSet;
-    public Vector2 position = new Vector2();
-    public float width = 50;
-    public float height = 50;
-    public Color color = Color.GREEN;
+    private Vector2 position = new Vector2();
+    private float size = 50;
+    private int speed;
+    private  float rotation = 0;
 
     public MySquare()
     {
-        projectionMatrixSet = false;
+
     }
 
-    public MySquare(float x, float y, float w, float h, Color c)
+    public MySquare(float x, float y, float size,float rotation, int speed)
     {
         this.position = new Vector2(x,y);
-        this.color = c;
-        this.width = w;
-        this.height = h;
-        projectionMatrixSet = false;
+        this.speed = speed;
+        this.size = size;
+        this.rotation = rotation;
+
     }
 
     @Override
@@ -43,36 +51,61 @@ public class MySquare extends Actor
         if(shapeRenderer == null)
             shapeRenderer = new ShapeRenderer();
 
-        //batch.begin();
-        //if(!projectionMatrixSet)
-        //{
-        //    shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-        //}
-        shapeRenderer.begin(ShapeType.Filled);
-        shapeRenderer.setColor(color);
-        shapeRenderer.rect(position.x, position.y, width, height);
-        shapeRenderer.end();
-        //batch.end();
+        this.shapeRenderer.begin(ShapeType.Filled);
+        switch (speed)
+        {
+            case SLOW:
+                this.shapeRenderer.setColor(SLOW_COLOR);
+                break;
+            case MEDIUM:
+                this.shapeRenderer.setColor(MEDIUM_COLOR);
+                break;
+            case FAST:
+                this.shapeRenderer.setColor(FAST_COLOR);
+                break;
+        }
+
+        this.shapeRenderer.identity();
+        this.shapeRenderer.rect(position.x, position.y, size/2.0f, size/2.0f,size,size,1,1,rotation);
+        this.shapeRenderer.end();
 
     }
 
     public  int size()
     {
-        return ByteHelper.VECTOR2 + ByteHelper.FLOAT + ByteHelper.FLOAT + ByteHelper.COLOR;
+        return ByteHelper.VECTOR2 + ByteHelper.FLOAT + ByteHelper.FLOAT  + ByteHelper.INT;
+    }
+
+    public boolean PointIntersects(Vector2 point)
+    {
+        Rectangle rectangle = new Rectangle(position.x - (size/2.0f),position.y-(size/2.0f),size,size);
+        Vector2 difference = new Vector2(point.x - position.x,point.y - position.y);
+        float distance = (float) Math.sqrt(difference.x * difference.x + difference.y * difference.y);
+        float rotate = (float)Math.atan2(difference.x,difference.y);
+
+        point.x = (float) ((Math.cos(rotate - (rotate * (3.14f/180))) * distance) + rectangle.x);
+        point.y = (float) ((Math.cos(rotate - (rotate * (3.14f/180))) * distance) + rectangle.y);
+
+        if(rectangle.contains(point))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public void Encode(ByteBuffer buffer) {
         ByteHelper.EncodeVector2(buffer,position);
-        buffer.putFloat(width);
-        buffer.putFloat(height);
-        ByteHelper.EncodeColor(buffer,color);
+        buffer.putFloat(size);
+        buffer.putFloat(rotation);
+        buffer.putInt(speed);
     }
 
     public void Decode(ByteBuffer data) {
         this.position = ByteHelper.DecodeVector2(data);
-        this.width = data.getFloat();
-        this.height = data.getFloat();
-        this.color = ByteHelper.DecodeColor(data);
+        this.size = data.getFloat();
+        this.rotation = data.getFloat();
+        this.speed = data.getInt();
 
     }
 }
