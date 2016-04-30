@@ -1,6 +1,6 @@
 package com.capnet.server;
 
-import com.capnet.share.BaseMap;
+import com.capnet.share.Map;
 import com.capnet.share.BasePlayerService;
 import com.capnet.share.Entities.Packets.PlayerInfo;
 import com.capnet.share.Entities.Player;
@@ -10,7 +10,6 @@ import com.capnet.share.packets.ClientHandshake;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,7 +22,7 @@ public class PlayerHostService extends BasePlayerService{
 
     private PacketManager _manager = new PacketManager();
 
-    public  PlayerHostService(BaseMap map) throws IOException {
+    public  PlayerHostService(Map map) throws IOException {
         super(map);
 
         _manager.OnPacket(pair -> {
@@ -52,7 +51,7 @@ public class PlayerHostService extends BasePlayerService{
     public  void  Update()
     {
         //loop through the players and send updated positions
-        for (Map.Entry<Socket,Player> iter : _playerSocketMapping.entrySet())
+        for (java.util.Map.Entry<Socket,Player> iter : _playerSocketMapping.entrySet())
         {
             //send the update positions to all the clients
             _manager.SendPacket(new PlayerSimple(iter.getValue()),_playerSocketMapping.keySet());

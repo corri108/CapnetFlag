@@ -1,10 +1,7 @@
 package com.capnet.share;
 
-import com.capnet.server.HostMap;
 import com.capnet.share.Entities.Player;
-import com.capnet.share.networking.PacketManager;
 
-import java.net.Socket;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,8 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BasePlayerService {
     protected ConcurrentHashMap<Integer,Player> _playerCollection = new ConcurrentHashMap<>();
-    protected BaseMap map;
-    public BasePlayerService(BaseMap map)
+    protected Map map;
+    public BasePlayerService(Map map)
     {
         this.map = map;
     }

@@ -1,29 +1,27 @@
 package com.capnet.server;
 
-import com.capnet.share.BaseMap;
+import com.capnet.share.Map;
 import com.capnet.share.Entities.Packets.PlayerInfo;
-import com.capnet.share.Entities.Player;
-import com.capnet.share.BasePlayerService;
 import com.capnet.share.networking.PacketManager;
 
 import java.io.IOException;
-import java.net.Socket;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by michaelpollind on 4/21/16.
  */
-public class HostService  {
+public class Server {
 
-    private  BaseMap _map;
+    private Map _map;
     private  PacketManager _manager = new PacketManager();
     private  PlayerHostService _playerHost;
     private  int _playerId = 0;
 
-    public HostService(int port) throws IOException {
+    public Server(int port) throws IOException {
         _map = new HostMap(_manager);
         _map.GenerateMap();
         _playerHost = new PlayerHostService(_map);
+
+        
 
         _manager.OnConnected(socket -> ((Runnable) () -> {
             //wait 15 seconds for a client to connect else unbind them

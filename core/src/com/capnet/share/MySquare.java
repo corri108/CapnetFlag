@@ -43,16 +43,16 @@ public class MySquare extends Actor
         if(shapeRenderer == null)
             shapeRenderer = new ShapeRenderer();
 
-        batch.begin();
-        if(!projectionMatrixSet)
-        {
-            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-        }
+        //batch.begin();
+        //if(!projectionMatrixSet)
+        //{
+        //    shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        //}
         shapeRenderer.begin(ShapeType.Filled);
         shapeRenderer.setColor(color);
         shapeRenderer.rect(position.x, position.y, width, height);
         shapeRenderer.end();
-        batch.end();
+        //batch.end();
 
     }
 

@@ -2,7 +2,7 @@ package com.capnet.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.capnet.share.BaseMap;
+import com.capnet.share.Map;
 import com.capnet.share.Entities.Packets.PlayerInfo;
 import com.capnet.share.Entities.Player;
 import com.capnet.share.BasePlayerService;
@@ -11,7 +11,6 @@ import com.capnet.share.Entities.Packets.PlayerSimple;
 import com.capnet.share.packets.ClientHandshake;
 
 import java.net.Socket;
-import java.util.Map;
 
 /**
  * Created by michaelpollind on 4/21/16.
@@ -21,7 +20,7 @@ public class PlayerLocalService extends BasePlayerService {
     private Socket _server;
     private PacketManager _manager;
 
-    public PlayerLocalService(PacketManager manager, Socket server, BaseMap map) {
+    public PlayerLocalService(PacketManager manager, Socket server, Map map) {
         super(map);
         _server = server;
         _manager = manager;
@@ -83,7 +82,7 @@ public class PlayerLocalService extends BasePlayerService {
 
     public  void Draw()
     {
-        for (Map.Entry<Integer,Player> player: _playerCollection.entrySet()) {
+        for (java.util.Map.Entry<Integer,Player> player: _playerCollection.entrySet()) {
             player.getValue().Draw();
 
         }

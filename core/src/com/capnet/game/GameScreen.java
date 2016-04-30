@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.capnet.server.HostMap;
-import com.capnet.share.BaseMap;
+import com.capnet.share.Map;
 import com.capnet.share.Entities.Player;
 import com.capnet.share.networking.PacketManager;
 
@@ -17,7 +17,7 @@ import java.net.Socket;
  */
 public class GameScreen implements Screen {
     private PlayerLocalService _playerManager ;
-    private BaseMap _map;
+    private Map _map;
     private OrthographicCamera _camera;
     private SpriteBatch _batch;
 
@@ -31,7 +31,16 @@ public class GameScreen implements Screen {
         },HostMap.class);
 
         _playerManager = new PlayerLocalService(manager,serverSocket,_map);
+
+
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+        _camera = new OrthographicCamera(30, 30 * (h / w));
+
+        _camera.position.set(_camera.viewportWidth / 2f, _camera.viewportHeight / 2f, 0);
+        _camera.update();
     }
+
 
     @Override
     public void show() {
@@ -52,17 +61,17 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         _batch.begin();
-        _playerManager.Draw();
-        _batch.end();
         if(_map != null)
             _map.draw(_batch,1f);
-
+        _playerManager.Draw();
+        _batch.end();
     }
 
     @Override
     public void resize(int width, int height) {
-        float aspectRatio = (float) width / (float) height;
-        _camera = new OrthographicCamera(2f * aspectRatio, 2f);
+        _camera.viewportWidth = 30f;
+        _camera.viewportHeight = 30f * height/width;
+        _camera.update();
     }
 
     @Override

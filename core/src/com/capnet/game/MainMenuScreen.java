@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.capnet.server.HostService;
+import com.capnet.server.Server;
 import com.capnet.share.networking.PacketManager;
 
 import java.io.IOException;
@@ -79,10 +79,12 @@ public class MainMenuScreen implements Screen {
                 int port = Integer.parseInt(_portField.getText());
                 String ipAddress = _ipField.getText();
                 //TODO: get toggle to work
-                try {
-                    new HostService(port);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+                if (_isHostToggle.isChecked()) {
+                    try {
+                        new Server(port);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                 }
 
                 PacketManager packetManager = new PacketManager();
