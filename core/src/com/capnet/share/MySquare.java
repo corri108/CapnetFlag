@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.capnet.share.packets.ByteHelper;
 
 
@@ -30,6 +28,8 @@ public class MySquare
     private float size = 50;
     private int speed;
     private  float rotation = 0;
+
+    //private  Vector2 asdf = Vector2.Zero;
 
     public MySquare()
     {
@@ -69,6 +69,21 @@ public class MySquare
         shapeRenderer.rect(position.x, position.y, size/2.0f, size/2.0f,size,size,1,1,rotation);
         shapeRenderer.end();
 
+
+        //debug CODE
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+//        shapeRenderer.setColor(1, 1, 0, 1);
+//        shapeRenderer.circle(asdf.x, asdf.y, 5);
+//        shapeRenderer.end();
+//
+//        Rectangle rectangle = new Rectangle(position.x,position.y,size,size);
+//
+//        shapeRenderer.begin(ShapeType.Line);
+//        shapeRenderer.identity();
+//        shapeRenderer.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height,size,size,1,1,0);
+//        shapeRenderer.end();
+
+
     }
 
     public  int size()
@@ -78,15 +93,16 @@ public class MySquare
 
     public boolean PointIntersects(Vector2 point)
     {
-        Rectangle rectangle = new Rectangle(position.x - (size/2.0f),position.y-(size/2.0f),size,size);
+        Rectangle rectangle = new Rectangle(position.x ,position.y,size,size);
+        Vector2 center = new Vector2((position.x+(size/2.0f)),(position.y+(size/2.0f)));
 
-        Vector2 difference = new Vector2(point.x - position.x,point.y - position.y);
+        Vector2 difference = new Vector2(point.x - center.x,point.y - center.y);
         float distance = (float) Math.sqrt(difference.x * difference.x + difference.y * difference.y);
-        float point_rotate = (float)Math.atan2(difference.x,difference.y);
+        float point_rotate = (float)Math.atan2(difference.y,difference.x);
 
         Vector2 hit = new Vector2();
-        hit.x = (float) ((Math.cos(point_rotate - (rotation * (3.14f/180f))) * distance) + rectangle.x);
-        hit.y = (float) ((Math.sin(point_rotate - (rotation * (3.14f/180f))) * distance) + rectangle.y);
+        hit.x = (float) ((Math.cos(point_rotate - (rotation * (3.14f/180f))) * distance) + center.x);
+        hit.y = (float) ((Math.sin(point_rotate - (rotation * (3.14f/180f))) * distance) + center.y);
 
         if(rectangle.contains(hit))
         {

@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector3;
-import com.capnet.server.HostMap;
 import com.capnet.share.Map;
 import com.capnet.share.Entities.Player;
 import com.capnet.share.networking.PacketManager;
@@ -31,9 +29,9 @@ public class GameScreen implements Screen {
         _shape = new ShapeRenderer();
         _batch = new SpriteBatch();
         manager.OnPacket(pair -> {
-
             _map = pair.Packet;
-        },HostMap.class);
+            _playerManager.UpdateMap(_map);
+        },Map.class);
 
         _playerManager = new PlayerLocalService(manager,serverSocket,_map);
 
@@ -60,6 +58,7 @@ public class GameScreen implements Screen {
         if(p != null) {
             _camera.position.set(p.Location.x, Map.MAP_HEIGHT/2.0f,0);
         }
+
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 

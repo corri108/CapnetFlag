@@ -15,11 +15,11 @@ import java.util.Random;
  * Created by michaelpollind on 4/25/16.
  */
 public class Map implements IPacket{
-    public static final int NUM_SQUARES = 1;
+    public static final int NUM_SQUARES = 50;
     public static final  int MIN_SQUARE_SIZE = 80;
     public static final  int MAX_SQUARE_SIZE = 300;
 
-    public static final  int MAP_WIDTH = 5;
+    public static final  int MAP_WIDTH = 1000;
     public static final  int MAP_HEIGHT = 500;
 
     protected ArrayList<MySquare> squares;
@@ -47,7 +47,7 @@ public class Map implements IPacket{
         //MySquare bg = new MySquare(-20, -20, 800, 600, Color.BLACK);
         //squares.add(bg);
 
-        for(int i = 0; i <= NUM_SQUARES; ++i)
+        for(int i = 0; i < NUM_SQUARES; ++i)
         {
             //make rand position and bounds
             int rX = myRand.nextInt(MAP_WIDTH);

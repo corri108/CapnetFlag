@@ -30,7 +30,7 @@ public class BasePlayerService {
             float multiplier = 1;
             if(map != null) {
                 int speed = map.GetSpeed(player.getValue().Location);
-                /*switch (speed) {
+                switch (speed) {
                     case MySquare.SLOW:
                         multiplier = .9f;
                         break;
@@ -43,7 +43,7 @@ public class BasePlayerService {
                     case MySquare.SUPER_SLOW:
                         multiplier = .3f;
                         break;
-                }*/
+                }
 
                 System.out.println(speed);
             }

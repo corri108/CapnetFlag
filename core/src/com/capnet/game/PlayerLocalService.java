@@ -57,6 +57,11 @@ public class PlayerLocalService extends BasePlayerService {
         down = new InputHandle(Input.Keys.S,manager,server);
     }
 
+    public void  UpdateMap(Map map)
+    {
+        this.map = map;
+    }
+
     public Player GetOwnedPlayer()
     {
         return  _playerCollection.get(_playerOwned);
