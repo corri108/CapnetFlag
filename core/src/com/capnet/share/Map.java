@@ -3,6 +3,7 @@ package com.capnet.share;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.capnet.share.packets.ByteHelper;
 import com.capnet.share.packets.IPacket;
 
@@ -14,11 +15,11 @@ import java.util.Random;
  * Created by michaelpollind on 4/25/16.
  */
 public class Map implements IPacket{
-    public static final int NUM_SQUARES = 100;
+    public static final int NUM_SQUARES = 1;
     public static final  int MIN_SQUARE_SIZE = 80;
     public static final  int MAX_SQUARE_SIZE = 300;
 
-    public static final  int MAP_WIDTH = 1000;
+    public static final  int MAP_WIDTH = 5;
     public static final  int MAP_HEIGHT = 500;
 
     protected ArrayList<MySquare> squares;
@@ -28,7 +29,7 @@ public class Map implements IPacket{
     //makes a random level with a random color out of the 6 prim/secondary colors
     public Map()
     {
-        squares = new ArrayList(NUM_SQUARES + 1);
+        squares = new ArrayList(NUM_SQUARES );
         myRand = new Random();
     }
 
@@ -46,7 +47,7 @@ public class Map implements IPacket{
         //MySquare bg = new MySquare(-20, -20, 800, 600, Color.BLACK);
         //squares.add(bg);
 
-        for(int i = 0; i < NUM_SQUARES; ++i)
+        for(int i = 0; i <= NUM_SQUARES; ++i)
         {
             //make rand position and bounds
             int rX = myRand.nextInt(MAP_WIDTH);
@@ -58,10 +59,22 @@ public class Map implements IPacket{
             Color color = new Color();
 
             //create square and add to arraylist
-            MySquare s = new MySquare(rX, rY, size, myRand.nextInt(360), myRand.nextInt(3));
+            MySquare s = new MySquare(rX, rY, size, myRand.nextInt(360), myRand.nextInt(3)+1);
             squares.add(s);
         }
 
+    }
+
+    public  int GetSpeed(Vector2 point)
+    {
+        for(int i = squares.size()-1;  i >= 0; --i) {
+            if(squares.get(i).PointIntersects(point))
+            {
+                return squares.get(i).GetSpeed();
+            }
+
+        }
+        return 0;
     }
 
     public void draw(ShapeRenderer shape)

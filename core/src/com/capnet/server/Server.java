@@ -18,8 +18,7 @@ public class Server {
 
     public Server(int port) throws IOException {
         _map = new HostMap(_manager);
-        _map.GenerateMap();
-        _playerHost = new PlayerHostService(_map);
+       _playerHost = new PlayerHostService(_map);
 
         Runnable run = ((Runnable) () -> {
 
