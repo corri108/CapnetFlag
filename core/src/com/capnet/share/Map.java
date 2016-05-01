@@ -2,6 +2,7 @@ package com.capnet.share;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.capnet.share.packets.ByteHelper;
 import com.capnet.share.packets.IPacket;
 
@@ -13,13 +14,13 @@ import java.util.Random;
  * Created by michaelpollind on 4/25/16.
  */
 public class Map implements IPacket{
-    public static final int NUM_SQUARES = 10;
-    public static final  int MIN_WIDTH = 20;
-    public static final  int MIN_HEIGHT = 20;
-    public static final  int MAX_WIDTH = 200;
-    public static final  int MAX_HEIGHT = 200;
-    protected float shaderThresh = 0.35f;
-    protected Color baseColor = Color.GREEN;
+    public static final int NUM_SQUARES = 100;
+    public static final  int MIN_SQUARE_SIZE = 80;
+    public static final  int MAX_SQUARE_SIZE = 300;
+
+    public static final  int MAP_WIDTH = 1000;
+    public static final  int MAP_HEIGHT = 500;
+
     protected ArrayList<MySquare> squares;
     protected Random myRand;
 
@@ -34,45 +35,10 @@ public class Map implements IPacket{
     public void GenerateMap()
     {
 
-        this.baseColor = getRandColor();
         randomize();
 
     }
 
-    private Color getRandColor()
-    {
-//        int r = myRand.nextInt(6);
-//
-//        if(r == 0)
-//        {
-//            return Color.RED;
-//        }
-//        else if(r == 1)
-//        {
-//            return Color.GREEN;
-//        }
-//        else if(r == 2)
-//        {
-//            return Color.BLUE;
-//        }
-//        else if(r == 3)
-//        {
-//            shaderThresh *= .5f;
-//            return Color.YELLOW;
-//        }
-//        else if(r == 4)
-//        {
-//            shaderThresh *= .5f;
-//            return Color.ORANGE;
-//        }
-//        else if(r == 5)
-//        {
-//            shaderThresh *= .5f;
-//            return Color.PURPLE;
-//        }
-
-        return Color.ORANGE;
-    }
 
     private void randomize()
     {
@@ -83,9 +49,9 @@ public class Map implements IPacket{
         for(int i = 0; i < NUM_SQUARES; ++i)
         {
             //make rand position and bounds
-            int rX = myRand.nextInt(621) - 20;
-            int rY = myRand.nextInt(501) - 20;
-            int size = myRand.nextInt(MAX_WIDTH - MIN_WIDTH) + MIN_WIDTH;
+            int rX = myRand.nextInt(MAP_WIDTH);
+            int rY = myRand.nextInt(MAP_HEIGHT);
+            int size = myRand.nextInt( MAX_SQUARE_SIZE - MIN_SQUARE_SIZE) + MAX_SQUARE_SIZE;
             boolean darker = true;// myRand.nextBoolean();
 
             //set random color newC for use
@@ -98,13 +64,13 @@ public class Map implements IPacket{
 
     }
 
-    public void draw(Batch batch, float alpha)
+    public void draw(ShapeRenderer shape)
     {
         //System.out.println("SQUARES: " + squares.size());
         //draw every square in the arraylist
         for(int i =0; i < squares.size(); ++i)
         {
-            squares.get(i).draw(batch, alpha);
+            squares.get(i).draw(shape);
         }
     }
 

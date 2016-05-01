@@ -5,6 +5,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.capnet.server.HostMap;
 import com.capnet.share.Map;
 import com.capnet.share.Entities.Player;
@@ -20,10 +22,13 @@ public class GameScreen implements Screen {
     private Map _map;
     private OrthographicCamera _camera;
     private SpriteBatch _batch;
+    private ShapeRenderer _shape;
 
 
     public  GameScreen(Main main, PacketManager manager, Socket serverSocket)
     {
+
+        _shape = new ShapeRenderer();
         _batch = new SpriteBatch();
         manager.OnPacket(pair -> {
 
@@ -35,7 +40,7 @@ public class GameScreen implements Screen {
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
-        _camera = new OrthographicCamera(30, 30 * (h / w));
+        _camera = new OrthographicCamera(500, 500 * (h / w));
 
         _camera.position.set(_camera.viewportWidth / 2f, _camera.viewportHeight / 2f, 0);
         _camera.update();
@@ -52,25 +57,29 @@ public class GameScreen implements Screen {
 
         _playerManager.Update(delta);
         Player p = _playerManager.GetOwnedPlayer();
-        if(p != null)
-            _camera.position.set(p.Location.x,p.Location.y,0);
-
-        _batch.setProjectionMatrix(_camera.combined);
-        _camera.update();
-
+        if(p != null) {
+            _camera.position.set(p.Location.x, Map.MAP_HEIGHT/2.0f,0);
+        }
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        _batch.begin();
+
+        _camera.update();
+        _batch.setProjectionMatrix(_camera.combined);
+        _shape.setProjectionMatrix(_camera.combined);
+
         if(_map != null)
-            _map.draw(_batch,1f);
-        _playerManager.Draw();
+            _map.draw(_shape);
+        _playerManager.Draw(_shape);
+
+        _batch.begin();
         _batch.end();
+
     }
 
     @Override
     public void resize(int width, int height) {
-        _camera.viewportWidth = 30f;
-        _camera.viewportHeight = 30f * height/width;
+        _camera.viewportWidth = 500f * width/height;
+        _camera.viewportHeight =Map.MAP_HEIGHT ;
         _camera.update();
     }
 

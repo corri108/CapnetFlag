@@ -15,7 +15,7 @@ import java.nio.ByteBuffer;
 /**
  * created by willcorrin on 4/27/16
  */
-public class MySquare extends Actor
+public class MySquare
 {
     public static final int SLOW = 0;
     public static final int MEDIUM= 1;
@@ -25,7 +25,6 @@ public class MySquare extends Actor
     public static  final  Color MEDIUM_COLOR = new Color(155/255f,158/255f,104/255f,255/255f);
     public static  final  Color FAST_COLOR = new Color(42/255f,43/255f,31/255f,255/255f);
 
-    private ShapeRenderer shapeRenderer;
     private Vector2 position = new Vector2();
     private float size = 50;
     private int speed;
@@ -45,29 +44,26 @@ public class MySquare extends Actor
 
     }
 
-    @Override
-    public void draw(Batch batch, float alpha)
+    public void draw(ShapeRenderer shapeRenderer)
     {
-        if(shapeRenderer == null)
-            shapeRenderer = new ShapeRenderer();
 
-        this.shapeRenderer.begin(ShapeType.Filled);
+       shapeRenderer.begin(ShapeType.Filled);
         switch (speed)
         {
             case SLOW:
-                this.shapeRenderer.setColor(SLOW_COLOR);
+                shapeRenderer.setColor(SLOW_COLOR);
                 break;
             case MEDIUM:
-                this.shapeRenderer.setColor(MEDIUM_COLOR);
+                shapeRenderer.setColor(MEDIUM_COLOR);
                 break;
             case FAST:
-                this.shapeRenderer.setColor(FAST_COLOR);
+                shapeRenderer.setColor(FAST_COLOR);
                 break;
         }
 
-        this.shapeRenderer.identity();
-        this.shapeRenderer.rect(position.x, position.y, size/2.0f, size/2.0f,size,size,1,1,rotation);
-        this.shapeRenderer.end();
+        shapeRenderer.identity();
+        shapeRenderer.rect(position.x, position.y, size/2.0f, size/2.0f,size,size,1,1,rotation);
+        shapeRenderer.end();
 
     }
 

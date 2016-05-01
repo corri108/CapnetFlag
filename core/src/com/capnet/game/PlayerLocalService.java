@@ -2,6 +2,7 @@ package com.capnet.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.capnet.share.Map;
 import com.capnet.share.Entities.Packets.PlayerInfo;
@@ -82,10 +83,10 @@ public class PlayerLocalService extends BasePlayerService {
         }
     }
 
-    public  void Draw()
+    public  void Draw(ShapeRenderer shape)
     {
         for (java.util.Map.Entry<Integer,Player> player: _playerCollection.entrySet()) {
-            player.getValue().Draw();
+            player.getValue().Draw(shape);
 
         }
     }

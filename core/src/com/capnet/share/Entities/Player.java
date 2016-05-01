@@ -17,10 +17,6 @@ public class Player{
     public Vector2 Location= new Vector2();
     public Vector2 Velocity = new Vector2();
 
-
-    // rendering will not work with this setup. packets have to be separated from the client
-    private ShapeRenderer shape = null;
-
     private int id = -1; //used for the server to communicate with players
     private String name = "hello this is  a test";
 
@@ -52,10 +48,9 @@ public class Player{
 
 
 
-    public void Draw()
+    public void Draw(ShapeRenderer shape)
     {
-        if(shape  == null)
-            shape =new ShapeRenderer();
+
 
       //  shape.begin(ShapeRenderer.ShapeType.Filled);
        // shape.setColor(Color.PINK);
