@@ -22,6 +22,16 @@ public class Map implements IPacket{
     public static final  int MAP_WIDTH = 1000;
     public static final  int MAP_HEIGHT = 500;
 
+    public static final int FINISH_SIZE = 50;
+
+    public static final int FINISH_X = 475;
+    public static final int FINISH_Y = 500;
+
+
+
+
+    public static final int
+
     protected ArrayList<MySquare> squares;
     protected Random myRand;
 
@@ -60,7 +70,9 @@ public class Map implements IPacket{
 
             //create square and add to arraylist
             MySquare s = new MySquare(rX, rY, size, myRand.nextInt(360), myRand.nextInt(3)+1);
+            MySquare end = new MySquare(FINISH_X,FINISH_Y,FINISH_SIZE,4);
             squares.add(s);
+            squares.add(end);
         }
 
     }
@@ -85,6 +97,8 @@ public class Map implements IPacket{
         {
             squares.get(i).draw(shape);
         }
+
+
     }
 
 
@@ -113,6 +127,7 @@ public class Map implements IPacket{
             square.Decode(data);
             squares.add(square);
         }
+
 
     }
 }

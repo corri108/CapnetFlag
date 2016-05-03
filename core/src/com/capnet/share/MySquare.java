@@ -19,10 +19,12 @@ public class MySquare
     public static final int SLOW = 1;
     public static final int MEDIUM= 2;
     public static final int FAST= 3;
+    public static final int END= 4;
 
     public static  final  Color FAST_COLOR= new Color(246/255f,251/255f,150/255f,255/255f);
     public static  final  Color MEDIUM_COLOR = new Color(155/255f,158/255f,104/255f,255/255f);
     public static  final  Color SLOW_COLOR = new Color(42/255f,43/255f,31/255f,255/255f);
+    public static final Color FINISH_COLOR= new Color (0/255f,255/255f,0/255f,255/255f);
 
     private Vector2 position = new Vector2();
     private float size = 50;
@@ -62,6 +64,9 @@ public class MySquare
                 break;
             case FAST:
                 shapeRenderer.setColor(FAST_COLOR);
+                break;
+            case END:
+                shapeRenderer.setColor(FINISH_COLOR);
                 break;
         }
 
