@@ -15,7 +15,7 @@ import java.util.Random;
  * Created by michaelpollind on 4/25/16.
  */
 public class Map implements IPacket{
-    public static final int NUM_SQUARES = 50;
+    public static final int NUM_SQUARES = 51;
     public static final  int MIN_SQUARE_SIZE = 80;
     public static final  int MAX_SQUARE_SIZE = 300;
 
@@ -25,12 +25,8 @@ public class Map implements IPacket{
     public static final int FINISH_SIZE = 50;
 
     public static final int FINISH_X = 475;
-    public static final int FINISH_Y = 500;
+    public static final int FINISH_Y = 450;
 
-
-
-
-    public static final int
 
     protected ArrayList<MySquare> squares;
     protected Random myRand;
@@ -57,7 +53,7 @@ public class Map implements IPacket{
         //MySquare bg = new MySquare(-20, -20, 800, 600, Color.BLACK);
         //squares.add(bg);
 
-        for(int i = 0; i < NUM_SQUARES; ++i)
+        for(int i = 0; i < NUM_SQUARES-1; ++i)
         {
             //make rand position and bounds
             int rX = myRand.nextInt(MAP_WIDTH);
@@ -70,11 +66,10 @@ public class Map implements IPacket{
 
             //create square and add to arraylist
             MySquare s = new MySquare(rX, rY, size, myRand.nextInt(360), myRand.nextInt(3)+1);
-            MySquare end = new MySquare(FINISH_X,FINISH_Y,FINISH_SIZE,4);
             squares.add(s);
-            squares.add(end);
         }
-
+        MySquare end = new MySquare(FINISH_X,FINISH_Y,FINISH_SIZE,0,4);
+        squares.add(end);
     }
 
     public  int GetSpeed(Vector2 point)
@@ -97,10 +92,7 @@ public class Map implements IPacket{
         {
             squares.get(i).draw(shape);
         }
-
-
     }
-
 
     @Override
     public ByteBuffer Encode() {
