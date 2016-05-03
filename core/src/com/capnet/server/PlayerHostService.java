@@ -46,8 +46,6 @@ public class PlayerHostService extends BasePlayerService{
                 p.Velocity = new Vector2(PLAYER_BASE_VELOCITY * (pair.Packet.IsPressed() == true ? 1 : 0), p.Velocity.y);
             if(pair.Packet.GetKey() == Input.Keys.S)
                 p.Velocity =  new Vector2(p.Velocity.x, -PLAYER_BASE_VELOCITY * (pair.Packet.IsPressed() == true ? 1 : 0));
-
-            System.out.println( p.Velocity.x + "," +  p.Velocity.y);
         }, InputSnapshot.class);
         _manager.StartSocketSender();
 

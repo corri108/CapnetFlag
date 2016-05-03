@@ -6,9 +6,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.capnet.share.Map;
 import com.capnet.share.Entities.Player;
 import com.capnet.share.networking.PacketManager;
+import com.capnet.share.packets.GameState;
 
 import java.net.Socket;
 
@@ -22,9 +25,14 @@ public class GameScreen implements Screen {
     private SpriteBatch _batch;
     private ShapeRenderer _shape;
 
+    private Stage _stage;
+
+    public int GameState = com.capnet.share.packets.GameState.WAITING;
 
     public  GameScreen(Main main, PacketManager manager, Socket serverSocket)
     {
+
+        _stage = new Stage(new ScreenViewport());
 
         _shape = new ShapeRenderer();
         _batch = new SpriteBatch();
@@ -42,6 +50,8 @@ public class GameScreen implements Screen {
 
         _camera.position.set(_camera.viewportWidth / 2f, _camera.viewportHeight / 2f, 0);
         _camera.update();
+
+        Gdx.input.setInputProcessor(_stage);
     }
 
 

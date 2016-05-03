@@ -44,8 +44,6 @@ public class BasePlayerService {
                         multiplier = .3f;
                         break;
                 }
-
-                System.out.println(speed);
             }
             Vector2 velocity = new Vector2(player.getValue().Velocity.x* delta *multiplier,player.getValue().Velocity.y* delta *multiplier);
             player.getValue().Location = player.getValue().Location.add(velocity);
