@@ -1,6 +1,7 @@
 package com.capnet.server;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.capnet.game.InputHandle;
 import com.capnet.share.Entities.InputSnapshot;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Random;
 
 /**
  * Created by michaelpollind on 4/21/16.
@@ -59,7 +61,7 @@ public class PlayerHostService extends BasePlayerService{
         _playerCollection.put(player.GetPlayerId(),player);
         _manager.RegisterSocket(socket);
 
-
+        player.color = randColor();
         //send the players the new player
         _manager.SendPacket(new PlayerInfo(player),_playerSocketMapping.keySet(),socket);
         for (java.util.Map.Entry<Socket,Player> iter : _playerSocketMapping.entrySet())
@@ -71,10 +73,45 @@ public class PlayerHostService extends BasePlayerService{
         _manager.SendPacket(map,socket);
     }
 
+    private Color randColor()
+    {
+        Random r = new Random();
 
+        int rx = r.nextInt(11);
+
+        switch (rx)
+        {
+            case 0:
+                return Color.WHITE;
+            case 1:
+                return Color.BLUE;
+            case 2:
+                return Color.RED;
+            case 3:
+                return Color.YELLOW;
+            case 4:
+                return Color.GREEN;
+            case 5:
+                return Color.PURPLE;
+            case 6:
+                return Color.PINK;
+            case 7:
+                return Color.ORANGE;
+            case 8:
+                return Color.CHARTREUSE;
+            case 9:
+                return Color.CORAL;
+            case 10:
+                return Color.MAGENTA;
+            case 11:
+                return Color.TEAL;
+        }
+
+        return Color.BLACK;
+    }
 
     @Override
-    public  void  Update(float delta)
+    public void  Update(float delta)
     {
         //loop through the players and send updated positions
         for (java.util.Map.Entry<Socket,Player> iter : _playerSocketMapping.entrySet())

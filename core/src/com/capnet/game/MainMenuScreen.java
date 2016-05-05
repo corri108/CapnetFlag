@@ -8,11 +8,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -34,6 +31,8 @@ public class MainMenuScreen implements Screen {
     private Main main;
 
     //main window
+    Image title;
+    TextField _hostField;
     private TextButton _login;
     private TextField _nameField;
     private TextField _ipField;
@@ -42,7 +41,6 @@ public class MainMenuScreen implements Screen {
     private TextButtonStyle _buttonStyle;
     private TextButtonStyle _toggledButtonStyle;
     private Button _isHostToggle;
-
 
     public  MainMenuScreen(Main main)
     {
@@ -78,6 +76,7 @@ public class MainMenuScreen implements Screen {
 
                 int port = Integer.parseInt(_portField.getText());
                 String ipAddress = _ipField.getText();
+                String playerName = _nameField.getText();
                 //TODO: get toggle to work
                 if (_isHostToggle.isChecked()) {
                     try {
@@ -89,7 +88,7 @@ public class MainMenuScreen implements Screen {
 
                 PacketManager packetManager = new PacketManager();
                 packetManager.OnConnected(socket -> {
-                    main.setScreen(new GameScreen(main,packetManager,socket));
+                    main.setScreen(new GameScreen(main,packetManager,socket, playerName));
                 });
                 packetManager.RegisterSocket(ipAddress,port);
                 try {
@@ -126,12 +125,11 @@ public class MainMenuScreen implements Screen {
         _isHostToggle.setStyle(_buttonStyle);
 
         //host
-        TextField hostField;
         //host
-        hostField = new TextField("Host?", uiSkin);
-        hostField.setPosition(120,100);
-        hostField.setWidth(400);
-        hostField.setHeight(15);
+        _hostField = new TextField("Host?", uiSkin);
+        _hostField.setPosition(120,100);
+        _hostField.setWidth(400);
+        _hostField.setHeight(15);
 
         TextField titleField;
         //title
@@ -141,14 +139,18 @@ public class MainMenuScreen implements Screen {
         titleField.setHeight(80);
         //end title
 
+        Texture imageTex = new Texture("title.png");
+
+        title = new Image(imageTex);
+
         //add all of our objects to the render list
         _stage.addActor(_login);
         _stage.addActor(_nameField);
         _stage.addActor(_ipField);
         _stage.addActor(_portField);
         _stage.addActor(_isHostToggle);
-        _stage.addActor(titleField);
-        _stage.addActor(hostField);
+        _stage.addActor(title);
+        _stage.addActor(_hostField);
 
         Gdx.input.setInputProcessor(_stage);
     }
@@ -171,12 +173,12 @@ public class MainMenuScreen implements Screen {
 
 
         _login.setPosition(width/2.0f,(height/2.0f)+10 -15*6, Align.center);
-
+        title.setPosition(width/2.0f,(height/2.0f)+10 +20*6, Align.center);
         _nameField.setPosition(width/2.0f,(height/2.0f)+10 -16*2, Align.center);
          _ipField.setPosition(width/2.0f,(height/2.0f)+10 -16*3, Align.center);
 
         _portField.setPosition(width/2.0f,(height/2.0f)+10 -16*4, Align.center);
-
+        _hostField.setPosition(width/2.0f,(height/2.0f)+10 -16*9, Align.center);
         _isHostToggle.setPosition(width/2.0f,(height/2.0f)+10 -16*10, Align.center);
     }
 

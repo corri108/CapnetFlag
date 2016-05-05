@@ -2,7 +2,10 @@ package com.capnet.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.capnet.share.Map;
 import com.capnet.share.Entities.Packets.PlayerInfo;
@@ -27,7 +30,7 @@ public class PlayerLocalService extends BasePlayerService {
     private  InputHandle right;
     private  InputHandle down;
 
-    public PlayerLocalService(PacketManager manager, Socket server, Map map) {
+    public PlayerLocalService(PacketManager manager, Socket server, Map map, String initialName) {
         super(map);
         _server = server;
         _manager = manager;
@@ -49,7 +52,9 @@ public class PlayerLocalService extends BasePlayerService {
 
         }, ClientHandshake.class);
 
-        manager.SendPacket(new PlayerInfo(new Player()),server);
+        Player toSend = new Player();
+        toSend.SetName(initialName);
+        manager.SendPacket(new PlayerInfo(toSend),server);
 
         left = new InputHandle(Input.Keys.A,manager,server);
         up = new InputHandle(Input.Keys.W,manager,server);
@@ -88,11 +93,22 @@ public class PlayerLocalService extends BasePlayerService {
         }
     }
 
-    public  void Draw(ShapeRenderer shape)
+    public  void Draw(ShapeRenderer shape, Batch batch, BitmapFont font, Vector2 screenLoc)
     {
-        for (java.util.Map.Entry<Integer,Player> player: _playerCollection.entrySet()) {
+        for (java.util.Map.Entry<Integer,Player> player: _playerCollection.entrySet())
+        {
             player.getValue().Draw(shape);
+        }
 
+        int i = 0;
+        for (java.util.Map.Entry<Integer,Player> player: _playerCollection.entrySet())
+        {
+            batch.begin();
+            font.draw(batch, player.getValue().GetName(), player.getValue().Location.x - 10, player.getValue().Location.y + 20);
+            font.draw(batch, player.getValue().GetName() + ": " + player.getValue().Wins, screenLoc.x + 10, screenLoc.y - 20 * i);
+            batch.end();
+
+            ++i;
         }
     }
 }
