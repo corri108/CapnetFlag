@@ -11,7 +11,7 @@ import com.capnet.share.Entities.Packets.PlayerInfo;
 import com.capnet.share.Entities.Player;
 import com.capnet.share.Entities.Packets.PlayerSimple;
 import com.capnet.share.networking.PacketManager;
-import com.capnet.share.packets.ClientHandshake;
+import com.capnet.share.packets.*;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -35,6 +35,13 @@ public class PlayerHostService extends BasePlayerService{
             _playerSocketMapping.get(pair.Out).Location = pair.Packet.position;
             _playerSocketMapping.get(pair.Out).Velocity = pair.Packet.velocity;
         }, PlayerSimple.class);
+
+        _manager.OnPacket(pair -> {
+            Player p = _playerSocketMapping.get(pair.Out);
+            if(p != null) {
+                p.isReady = pair.Packet.ready;
+            }
+        },Ready.class);
 
         _manager.OnPacket(pair -> {
 
@@ -62,6 +69,8 @@ public class PlayerHostService extends BasePlayerService{
         _manager.RegisterSocket(socket);
 
         player.color = randColor();
+
+
         //send the players the new player
         _manager.SendPacket(new PlayerInfo(player),_playerSocketMapping.keySet(),socket);
         for (java.util.Map.Entry<Socket,Player> iter : _playerSocketMapping.entrySet())
@@ -71,6 +80,8 @@ public class PlayerHostService extends BasePlayerService{
 
         //send the player the map
         _manager.SendPacket(map,socket);
+        _manager.SendPacket(new GameState(map.GetGamestate()),socket);
+
     }
 
     private Color randColor()
@@ -114,14 +125,32 @@ public class PlayerHostService extends BasePlayerService{
     public void  Update(float delta)
     {
         //loop through the players and send updated positions
+        boolean isReady = true;
         for (java.util.Map.Entry<Socket,Player> iter : _playerSocketMapping.entrySet())
         {
-            //send the update positions to all the clients
-            _manager.SendPacket(new PlayerSimple(iter.getValue()),_playerSocketMapping.keySet());
-
+            if(iter.getValue().isInPlay) {
+                //send the update positions to all the clients
+                _manager.SendPacket(new PlayerSimple(iter.getValue()), _playerSocketMapping.keySet());
+                if (map.HitEnd(iter.getValue())) {
+                    iter.getValue().isInPlay = false;
+                    _manager.SendPacket(new GameState(GameState.CLOSING), iter.getKey());
+                    _manager.SendPacket(new InPlay(false,iter.getValue().GetPlayerId()),_playerSocketMapping.keySet());
+                    _manager.SendPacket(new PlayerResult(iter.getValue()),_playerSocketMapping.keySet());
+                }
+            }
+            if(!iter.getValue().isReady)
+                isReady = false;
+        }
+        if(map.GetGamestate() == GameState.WAITING && isReady && _playerSocketMapping.size() != 0)
+        {
+            map.SetGamestate(GameState.IN_PLAY);
+            _manager.SendPacket(new GameState(GameState.IN_PLAY),_playerSocketMapping.keySet());
         }
         super.Update(delta);
     }
+
+
+
 
     public Player GetPlayer(Socket s)
     {

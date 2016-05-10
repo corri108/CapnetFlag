@@ -22,6 +22,8 @@ public class Player
     public int Wins = 0;
     private int id = -1; //used for the server to communicate with players
     private String name = "hello this is  a test";
+    public boolean isReady = false;
+    public boolean isInPlay = true;
 
     public Player(int id, String name)
     {

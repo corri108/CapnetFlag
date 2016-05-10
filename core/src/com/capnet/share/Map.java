@@ -22,7 +22,7 @@ public class Map implements IPacket{
     public static final  int MIN_SQUARE_SIZE = 80;
     public static final  int MAX_SQUARE_SIZE = 300;
 
-    public static final  int MAP_WIDTH = 1000;
+    public static final  int MAP_WIDTH = 6000;
     public static final  int MAP_HEIGHT = 500;
 
     public static final int FINISH_SIZE = 50;
@@ -37,6 +37,11 @@ public class Map implements IPacket{
     public  void  SetGamestate(int state)
     {
         this.gameState = state;
+    }
+
+    public int GetGamestate()
+    {
+        return this.gameState;
     }
 
     //makes a random level with a random color out of the 6 prim/secondary colors
@@ -89,51 +94,54 @@ public class Map implements IPacket{
 
     public  void  UpdatePlayer(Player player,float delta)
     {
-        if(gameState == GameState.WAITING)
-        {
-            if(player.Location.x > starting.x + starting.width)
-            {
-                player.Location.x = starting.x + starting.width;
+
+        if(player.isInPlay) {
+            if (gameState == GameState.WAITING) {
+                if (player.Location.x > starting.x + starting.width) {
+                    player.Location.x = starting.x + starting.width;
+                }
+
+                if (player.Location.y > starting.y + starting.height) {
+                    player.Location.y = starting.y + starting.height;
+                }
+                if (player.Location.x < 0) {
+                    player.Location.x = 0;
+                }
+                if (player.Location.y < 0) {
+                    player.Location.y = 0;
+                }
+
             }
 
-            if(player.Location.y > starting.y + starting.height)
-            {
-                player.Location.y = starting.y + starting.height;
-            }
-            if(player.Location.x < 0){
-                player.Location.x = 0;
-            }
-            if(player.Location.y < 0){
-                player.Location.y = 0;
+            float multiplier = 1;
+            int speed = this.GetSpeed(player.Location);
+            if (starting.contains(player.Location.x, player.Location.y)) {
+                multiplier = MySquare.FAST;
+            } else {
+                switch (speed) {
+                    case MySquare.SLOW:
+                        multiplier = .9f;
+                        break;
+                    case MySquare.MEDIUM:
+                        multiplier = 1.2f;
+                        break;
+                    case MySquare.FAST:
+                        multiplier = 3f;
+                        break;
+                    case MySquare.SUPER_SLOW:
+                        multiplier = .3f;
+                        break;
+                }
             }
 
+            Vector2 velocity = new Vector2(player.Velocity.x * delta * multiplier, player.Velocity.y * delta * multiplier);
+            player.Location = player.Location.add(velocity);
         }
+    }
 
-        float multiplier = 1;
-        int speed = this.GetSpeed(player.Location);
-        if(starting.contains(player.Location.x,player.Location.y))
-        {
-            multiplier = MySquare.FAST;
-        }
-        else {
-            switch (speed) {
-                case MySquare.SLOW:
-                    multiplier = .9f;
-                    break;
-                case MySquare.MEDIUM:
-                    multiplier = 1.2f;
-                    break;
-                case MySquare.FAST:
-                    multiplier = 3f;
-                    break;
-                case MySquare.SUPER_SLOW:
-                    multiplier = .3f;
-                    break;
-            }
-        }
-
-        Vector2 velocity = new Vector2(player.Velocity.x* delta *multiplier,player.Velocity.y* delta *multiplier);
-        player.Location = player.Location.add(velocity);
+    public  boolean HitEnd(Player p)
+    {
+        return ending.contains(p.Location.x,p.Location.y);
     }
 
     public void draw(ShapeRenderer shape)
@@ -151,12 +159,16 @@ public class Map implements IPacket{
         shape.rect(ending.x, ending.y, ending.width / 2.0f, ending.height / 2.0f, ending.width, ending.height, 1, 1, 0.0f);
         shape.end();
 
-        shape.begin(ShapeRenderer.ShapeType.Filled);
-        shape.identity();
-        shape.setColor(Color.WHITE);
-        shape.rect(starting.x,starting.y,starting.width,starting.height);
-        shape.end();
+        if(gameState == GameState.WAITING) {
+            shape.begin(ShapeRenderer.ShapeType.Filled);
+            shape.identity();
+            shape.setColor(Color.WHITE);
+            shape.rect(starting.x, starting.y, starting.width, starting.height);
+            shape.end();
+        }
     }
+
+
 
     @Override
     public ByteBuffer Encode() {

@@ -69,7 +69,7 @@ public class PacketListener implements Runnable{
 
 					Thread.sleep(10);
 				}
-					//attempts to reprocess the packet if the handler isn't ready
+					//attempts to reprocess the packet if the handler isn't inplay
 					if (_reprocess.size() > 0) {
 						IPacket p = _reprocess.remove();
 						if (p != null) {

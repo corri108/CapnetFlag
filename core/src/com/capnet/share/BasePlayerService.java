@@ -1,8 +1,5 @@
 package com.capnet.share;
 
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.math.Vector2;
-import com.capnet.game.InputHandle;
 import com.capnet.share.Entities.Player;
 
 import java.util.Iterator;

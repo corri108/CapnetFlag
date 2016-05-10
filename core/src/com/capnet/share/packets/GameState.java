@@ -7,8 +7,8 @@ import java.nio.ByteBuffer;
  */
 public class GameState implements IPacket {
     public  static  final  int WAITING = 0;
-    public  static  final  int IN_PLAY = 0;
-    public  static  final  int CLOSING = 0;
+    public  static  final  int IN_PLAY = 1;
+    public  static  final  int CLOSING = 2;
 
     public  int gameState = 0;
 
