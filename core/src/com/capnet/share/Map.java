@@ -18,11 +18,11 @@ import java.util.Random;
  * Created by michaelpollind on 4/25/16.
  */
 public class Map implements IPacket{
-    public static final int NUM_SQUARES = 51;
+    public static final int NUM_SQUARES = 300;
     public static final  int MIN_SQUARE_SIZE = 80;
-    public static final  int MAX_SQUARE_SIZE = 300;
+    public static final  int MAX_SQUARE_SIZE = 100;
 
-    public static final  int MAP_WIDTH = 6000;
+    public static final  int MAP_WIDTH =3000;
     public static final  int MAP_HEIGHT = 500;
 
     public static final int FINISH_SIZE = 50;
