@@ -42,6 +42,7 @@ public class PlayerLocalService extends BasePlayerService {
             if(p != null) {
                 p.Location = pair.Packet.position;
                 p.Velocity = pair.Packet.velocity;
+                p.isReady = pair.Packet.ready;
             }
         },PlayerSimple.class);
 
@@ -105,8 +106,9 @@ public class PlayerLocalService extends BasePlayerService {
         return  _playerCollection.get(_playerOwned);
     }
 
+
     @Override
-    public  void Update(float delta)
+    public void Update(float delta)
     {
         super.Update(delta);
 
@@ -145,7 +147,18 @@ public class PlayerLocalService extends BasePlayerService {
         {
             batch.begin();
             if(player.getValue().isInPlay)
-                font.draw(batch, player.getValue().GetName(), player.getValue().Location.x - 10, player.getValue().Location.y + 20);
+            {
+                if(map.GetGamestate() == GameState.WAITING)
+                {
+                    if (player.getValue().isReady) {
+                        font.draw(batch, player.getValue().GetName() + ": !", player.getValue().Location.x - 10, player.getValue().Location.y + 20);
+                    } else {
+                        font.draw(batch, player.getValue().GetName() + ": X", player.getValue().Location.x - 10, player.getValue().Location.y + 20);
+                    }
+                }
+                else
+                    font.draw(batch, player.getValue().GetName(), player.getValue().Location.x - 10, player.getValue().Location.y + 20);
+            }
            // font.draw(batch, player.getValue().GetName() + ": " + player.getValue().Wins, screenLoc.x + 10, screenLoc.y - 20 * i);
             batch.end();
 

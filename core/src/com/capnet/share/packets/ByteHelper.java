@@ -12,7 +12,7 @@ public  class ByteHelper {
     public static final int INT = 4;
     public static final int SHORT = 2;
     public static final int CHAR = 2;
-    public static final int BOOL = 1;
+    public static final int BOOL = 4;
     public static final int FLOAT = 4;
     public static final int VECTOR2 = FLOAT*2;
     public static final int COLOR = FLOAT*4;
@@ -23,6 +23,30 @@ public  class ByteHelper {
         buffer.putFloat(color.g);
         buffer.putFloat(color.b);
         buffer.putFloat(color.a);
+    }
+
+    public static void EncodeBool(ByteBuffer buffer, boolean b)
+    {
+        int i = 0;
+
+        if(b)
+        {
+            i = 1;
+        }
+
+        buffer.putInt(i);
+    }
+
+    public static boolean DecodeBool(ByteBuffer buffer)
+    {
+        int i = buffer.getInt();
+
+        if(i == 0)//false
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public static Color DecodeColor(ByteBuffer buffer)

@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.capnet.server.PlayerHostService;
 import com.capnet.share.Entities.Packets.PlayerInfo;
 import com.capnet.share.Map;
 import com.capnet.share.Entities.Player;
@@ -133,8 +134,14 @@ public class GameScreen implements Screen {
                 new Vector2(_camera.position.x - _camera.viewportWidth / 2,
                         _camera.position.y + _camera.viewportWidth / 3));
 
-
         if(_map != null && _map.GetGamestate() == com.capnet.share.packets.GameState.CLOSING) {
+
+            if(PlayerHostService.GetWinningPlayer() != null)
+            {
+                ///_batch.begin();
+                ///ShowWinner();
+                ///_batch.end();
+            }
             _stage.act();
             _stage.draw();
         }
@@ -144,6 +151,11 @@ public class GameScreen implements Screen {
             resize( Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             _isDirty = false;
         }
+    }
+
+    private void ShowWinner()
+    {
+        bmf.draw(_batch, PlayerHostService.GetWinningPlayer().GetName() + " IS THE WINNER!", -40 + _camera.position.x ,50 + _camera.position.y);
     }
 
     @Override

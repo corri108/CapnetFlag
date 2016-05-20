@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.capnet.server.PlayerHostService;
 import com.capnet.share.Entities.Player;
 import com.capnet.share.packets.ByteHelper;
 import com.capnet.share.packets.GameState;
@@ -120,16 +121,16 @@ public class Map implements IPacket{
             } else {
                 switch (speed) {
                     case MySquare.SLOW:
-                        multiplier = .9f;
+                        multiplier = 1.5f;
                         break;
                     case MySquare.MEDIUM:
-                        multiplier = 1.2f;
-                        break;
-                    case MySquare.FAST:
                         multiplier = 3f;
                         break;
+                    case MySquare.FAST:
+                        multiplier = 4f;
+                        break;
                     case MySquare.SUPER_SLOW:
-                        multiplier = .3f;
+                        multiplier = 1f;
                         break;
                 }
             }
@@ -141,6 +142,7 @@ public class Map implements IPacket{
 
     public  boolean HitEnd(Player p)
     {
+        PlayerHostService.SetWinningPlayer(p);
         return ending.contains(p.Location.x,p.Location.y);
     }
 
@@ -162,7 +164,7 @@ public class Map implements IPacket{
         if(gameState == GameState.WAITING) {
             shape.begin(ShapeRenderer.ShapeType.Filled);
             shape.identity();
-            shape.setColor(Color.WHITE);
+            shape.setColor(Color.DARK_GRAY);
             shape.rect(starting.x, starting.y, starting.width, starting.height);
             shape.end();
         }

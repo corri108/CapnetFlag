@@ -121,6 +121,20 @@ public class PlayerHostService extends BasePlayerService{
         return Color.BLACK;
     }
 
+    public static Player GetWinningPlayer()
+    {
+        return _winner;
+    }
+
+    private static Player _winner = null;
+
+    public static void SetWinningPlayer(Player p)
+    {
+        //only say he is winner if he is first
+        if(_winner == null)
+            _winner = p;
+    }
+
     @Override
     public void  Update(float delta)
     {
@@ -136,6 +150,7 @@ public class PlayerHostService extends BasePlayerService{
                     _manager.SendPacket(new GameState(GameState.CLOSING), iter.getKey());
                     _manager.SendPacket(new InPlay(false,iter.getValue().GetPlayerId()),_playerSocketMapping.keySet());
                     _manager.SendPacket(new PlayerResult(iter.getValue()),_playerSocketMapping.keySet());
+                   SetWinningPlayer(_winner);
                 }
             }
             if(!iter.getValue().isReady)

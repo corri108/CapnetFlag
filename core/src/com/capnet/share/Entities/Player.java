@@ -63,7 +63,4 @@ public class Player
         shape.circle(Location.x, Location.y, 5);
         shape.end();
     }
-
-
-
 }
